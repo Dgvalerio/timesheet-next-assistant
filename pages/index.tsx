@@ -4,9 +4,12 @@ import Head from 'next/head';
 const Home: NextPage = () => (
   <div>
     <Head>
-      <meta charSet='utf-8' />
+      <meta charSet="utf-8" />
       <title>Timesheet Assistant</title>
-      <meta name='description' content='The assistant for timesheet, and an clone.' />
+      <meta
+        name="description"
+        content="The assistant for timesheet, and an clone."
+      />
       <link rel="icon" href="/fav.png" />
     </Head>
 
