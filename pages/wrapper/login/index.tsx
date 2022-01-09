@@ -1,26 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+
+import Image from 'next/image';
+import Link from 'next/link';
 
 import Icon from '../../../components/icon';
+import useLoginController from './controller';
 import { LoginStyles as Styles } from './styles';
-
-type ControllerReturn = {
-  email: string;
-  setEmail: (email: string) => void;
-  password: string;
-  setPassword: (password: string) => void;
-  handleSubmit: () => void;
-};
-
-const useLoginController = (): ControllerReturn => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = () => {
-    alert(JSON.stringify({ email, password }));
-  };
-
-  return { email, setEmail, password, setPassword, handleSubmit };
-};
 
 const Login: FC = () => {
   const { email, setEmail, password, setPassword, handleSubmit } =
@@ -30,8 +15,7 @@ const Login: FC = () => {
     <Styles.Container>
       <section>
         <div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="https://luby-timesheet.azurewebsites.net/Content/custom/image/logo/timesheet_login.png"
             alt="Timesheet Azure Logo"
             width={215}
@@ -68,8 +52,7 @@ const Login: FC = () => {
             Login In
             <Icon.SignIn />
           </button>
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/">Esqueceu sua senha?</a>
+          <Link href="/">Esqueceu sua senha?</Link>
         </form>
       </section>
     </Styles.Container>
