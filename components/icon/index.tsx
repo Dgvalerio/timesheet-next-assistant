@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import ArrowRight from './arrow-right';
+import History from './history';
 import Key from './key';
 import SignIn from './signin';
 import User from './user';
@@ -33,11 +34,12 @@ IconWrapper.defaultProps = {
 
 type IconType = {
   ArrowRight: FC<IconProps>;
+  History: FC<IconProps>;
   Key: FC<IconProps>;
   SignIn: FC<IconProps>;
   User: FC<IconProps>;
 };
 
-const Index: IconType = { ArrowRight, Key, SignIn, User };
+const Index: IconType = { ArrowRight, History, Key, SignIn, User };
 
 export default Index;
