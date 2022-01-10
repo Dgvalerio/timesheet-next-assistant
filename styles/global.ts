@@ -4,7 +4,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     outline: none;
-    font-family: Roboto, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Noto Sans", sans-serif;
   }
 
   body {
