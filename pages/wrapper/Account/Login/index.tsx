@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Icon from '../../../components/icon';
+import Icon from '../../../../components/icon';
 import useLoginController from './controller';
 import { LoginStyles as Styles } from './styles';
 
