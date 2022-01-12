@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import Icon from '../../../../components/icon';
 import useLoginController from './controller';
-import { LoginStyles as Styles } from './styles';
+import Styles from './styles';
 
 const Login: FC = () => {
   const { email, setEmail, password, setPassword, handleSubmit } =

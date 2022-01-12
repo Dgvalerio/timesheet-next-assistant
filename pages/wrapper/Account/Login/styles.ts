@@ -123,6 +123,6 @@ const Container = styled.main`
   }
 `;
 
-export const LoginStyles = {
-  Container,
-};
+const AccountLoginStyles = { Container };
+
+export default AccountLoginStyles;

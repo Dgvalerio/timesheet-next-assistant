@@ -357,6 +357,6 @@ const Container = styled.main`
   }
 `;
 
-export const WorksheetReadStyles = {
-  Container,
-};
+const WorksheetReadStyles = { Container };
+
+export default WorksheetReadStyles;

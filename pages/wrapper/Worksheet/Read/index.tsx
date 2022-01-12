@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import Icon from '../../../../components/icon';
 import useWorksheetReadController from './controller';
-import { WorksheetReadStyles as Styles } from './styles';
+import Styles from './styles';
 
 const WorksheetRead: FC = () => {
   const {
