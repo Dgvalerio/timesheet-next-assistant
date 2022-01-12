@@ -5,7 +5,8 @@ import Check from './check';
 import History from './history';
 import Key from './key';
 import Message from './message';
-import SignIn from './signin';
+import SignIn from './sign-in';
+import SignOut from './sign-out';
 import Speedometer from './speedometer';
 import User from './user';
 
@@ -42,6 +43,7 @@ type IconType = {
   Message: FC<IconProps>;
   Key: FC<IconProps>;
   SignIn: FC<IconProps>;
+  SignOut: FC<IconProps>;
   Speedometer: FC<IconProps>;
   User: FC<IconProps>;
 };
@@ -53,6 +55,7 @@ const Index: IconType = {
   Message,
   Key,
   SignIn,
+  SignOut,
   Speedometer,
   User,
 };
