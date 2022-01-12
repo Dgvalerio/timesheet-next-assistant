@@ -34,9 +34,9 @@ export const IconWrapper: FC<IconProps> = ({
 );
 
 IconWrapper.defaultProps = {
-  size: 16,
-  width: 16,
-  height: 16,
+  size: 12,
+  width: 12,
+  height: 12,
 };
 
 type IconType = {
