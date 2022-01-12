@@ -3,8 +3,8 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 
 import Icon from '../../../../components/icon';
+import Styles from '../../../../styles/Worksheet/Read/styles';
 import useWorksheetReadController from './controller';
-import Styles from './styles';
 
 const WorksheetRead: FC = () => {
   const {
