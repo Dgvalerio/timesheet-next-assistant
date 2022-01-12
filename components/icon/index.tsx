@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import ArrowLeft from './arrow-left';
 import ArrowRight from './arrow-right';
 import Check from './check';
 import History from './history';
@@ -37,6 +38,7 @@ IconWrapper.defaultProps = {
 };
 
 type IconType = {
+  ArrowLeft: FC<IconProps>;
   ArrowRight: FC<IconProps>;
   Check: FC<IconProps>;
   History: FC<IconProps>;
@@ -49,6 +51,7 @@ type IconType = {
 };
 
 const Index: IconType = {
+  ArrowLeft,
   ArrowRight,
   Check,
   History,
