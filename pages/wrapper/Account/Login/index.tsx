@@ -3,9 +3,9 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Icon from '../../../../components/icon';
-import useLoginController from '../../../../controllers/wrapper/Account/Login/controller';
-import Styles from '../../../../styles/wrapper/Account/Login/styles';
+import Icon from '@/components/icon';
+import useLoginController from '@/controllers/wrapper/Account.Login';
+import Styles from '@/styles/wrapper/Account.Login';
 
 const Login: FC = () => {
   const { email, setEmail, password, setPassword, handleSubmit } =

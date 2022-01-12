@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import Image from 'next/image';
 
-import Icon from '../../../../components/icon';
-import useWorksheetReadController from '../../../../controllers/wrapper/Worksheet/Read/controller';
-import Styles from '../../../../styles/wrapper/Worksheet/Read/styles';
+import Icon from '@/components/icon';
+import useWorksheetReadController from '@/controllers/wrapper/Worksheet.Read';
+import Styles from '@/styles/wrapper/Worksheet.Read';
 
 const WorksheetRead: FC = () => {
   const {
