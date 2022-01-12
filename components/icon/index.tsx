@@ -6,6 +6,7 @@ import Check from './check';
 import History from './history';
 import Key from './key';
 import Message from './message';
+import Pencil from './pencil';
 import SignIn from './sign-in';
 import SignOut from './sign-out';
 import Speedometer from './speedometer';
@@ -44,6 +45,7 @@ type IconType = {
   History: FC<IconProps>;
   Message: FC<IconProps>;
   Key: FC<IconProps>;
+  Pencil: FC<IconProps>;
   SignIn: FC<IconProps>;
   SignOut: FC<IconProps>;
   Speedometer: FC<IconProps>;
@@ -57,6 +59,7 @@ const Index: IconType = {
   History,
   Message,
   Key,
+  Pencil,
   SignIn,
   SignOut,
   Speedometer,
