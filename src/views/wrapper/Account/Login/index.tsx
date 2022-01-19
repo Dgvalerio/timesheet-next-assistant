@@ -3,13 +3,12 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Icon from '@/src/components/icon';
-
-import useLoginController from './controller';
-import Styles from './style';
+import Icon from '@/components/icon';
+import useLoginController from '@/views/wrapper/Account/Login/controller';
+import Styles from '@/views/wrapper/Account/Login/style';
 
 const Login: FC = () => {
-  const { email, setEmail, password, setPassword, handleSubmit } =
+  const { email, setEmail, password, setPassword, handleSubmit, isLoading } =
     useLoginController();
 
   return (
@@ -49,7 +48,7 @@ const Login: FC = () => {
               required
             />
           </div>
-          <button type="submit">
+          <button type="submit" disabled={isLoading}>
             Login In
             <Icon.SignIn />
           </button>
