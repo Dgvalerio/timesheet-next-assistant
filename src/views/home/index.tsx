@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 
-import useHomeController from './controller';
-import Styles from './style';
+import useHomeController from '@/views/home/controller';
+import Styles from '@/views/home/style';
 
 const Home: NextPage = () => {
   const { entered, setEntered } = useHomeController();

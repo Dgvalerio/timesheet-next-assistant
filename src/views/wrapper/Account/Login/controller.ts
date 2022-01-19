@@ -2,11 +2,10 @@ import { FormEvent, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { WrapperApi } from '@/types/api';
 import { routes } from '@/utils/routes';
 
 import axios from 'axios';
-
-import { WrapperSignIn } from '../../../../../pages/api/wrapper/sign-in';
 
 type ControllerReturn = {
   email: string;
@@ -28,16 +27,12 @@ const useLoginController = (): ControllerReturn => {
     event.preventDefault();
     console.log('handleSubmit', { email, password });
 
-    // post
-    // <T = any, R = AxiosResponse<T>, D = any>
-    // (url: string, data?: D, config?: AxiosRequestConfig<D>)
-    // : Promise<R>;
-
     try {
-      const response = await axios.post<never, never, WrapperSignIn.Request>(
-        '/api/wrapper/sign-in',
-        { login: email, password }
-      );
+      const response = await axios.post<
+        never,
+        never,
+        WrapperApi.SignIn.Request
+      >('/api/wrapper/sign-in', { login: email, password });
 
       console.log({ response });
       await router.push(routes.wrapper.worksheet.read());

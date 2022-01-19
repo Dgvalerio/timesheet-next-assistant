@@ -1,27 +1,15 @@
 import type { NextApiRequest } from 'next';
 
-import { ApiHandler } from '@/types/api';
+import { ApiHandler, WrapperApi } from '@/types/api';
 import { wrapper } from '@/utils/wrapper';
 
-import Protocol from 'devtools-protocol';
 import puppeteer from 'puppeteer/lib/cjs/puppeteer/node-puppeteer-core';
 
-export namespace WrapperSignIn {
-  export interface Request {
-    login: string;
-    password: string;
-  }
-
-  export interface Response {
-    cookies: Protocol.Network.Cookie[];
-  }
-}
-
 interface Request extends NextApiRequest {
-  body: WrapperSignIn.Request;
+  body: WrapperApi.SignIn.Request;
 }
 
-const handler: ApiHandler<Request, WrapperSignIn.Response> = async (
+const handler: ApiHandler<Request, WrapperApi.SignIn.Response> = async (
   req,
   res
 ) => {

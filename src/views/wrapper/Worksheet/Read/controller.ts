@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { routes } from '@/src/utils/routes';
+import { routes } from '@/utils/routes';
 
 type ControllerReturn = {
   client: string;

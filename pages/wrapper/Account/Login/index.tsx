@@ -1,3 +1,3 @@
-import Login from '@/src/views/wrapper/Account/Login';
+import Login from '@/views/wrapper/Account/Login';
 
 export default Login;
