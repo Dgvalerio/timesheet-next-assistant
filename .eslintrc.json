@@ -44,6 +44,7 @@
           "ignoreCase": true
         }
       }
-    ]
+    ],
+    "@typescript-eslint/no-namespace": "off"
   }
 }
