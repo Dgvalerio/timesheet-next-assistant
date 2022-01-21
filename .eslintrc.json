@@ -45,6 +45,7 @@
         }
       }
     ],
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"]
   }
 }

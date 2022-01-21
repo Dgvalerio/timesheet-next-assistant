@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
 import { routes } from '@/utils/routes';
 
-type ControllerReturn = {
+interface ControllerReturn {
   client: string;
   setClient: (client: string) => void;
   project: string;
@@ -27,7 +28,7 @@ type ControllerReturn = {
   setDescription: (description: string) => void;
   handleSubmit: () => void;
   logout: () => void;
-};
+}
 
 const useWorksheetReadController = (): ControllerReturn => {
   const router = useRouter();
@@ -46,6 +47,7 @@ const useWorksheetReadController = (): ControllerReturn => {
   const [totalProjectTime, setTotalProjectTime] = useState<string>('');
   const [totalUtilizedTime, setTotalUtilizedTime] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const { cookies } = useSelector((state) => state.user);
 
   const handleSubmit = () => {
     alert(
@@ -67,6 +69,10 @@ const useWorksheetReadController = (): ControllerReturn => {
   const logout = () => {
     void router.push(routes.wrapper.account.login());
   };
+
+  useEffect(() => {
+    console.log({ cookies });
+  }, [cookies]);
 
   return {
     client,

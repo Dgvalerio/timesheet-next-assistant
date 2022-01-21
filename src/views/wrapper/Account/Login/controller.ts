@@ -1,41 +1,44 @@
 import { FormEvent, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
-import { WrapperApi } from '@/types/api';
+import { setCookies } from '@/store/user/actions';
+import api from '@/utils/api';
 import { routes } from '@/utils/routes';
 
-import axios from 'axios';
-
-type ControllerReturn = {
+interface ControllerReturn {
   email: string;
   setEmail: (email: string) => void;
   password: string;
   setPassword: (password: string) => void;
   handleSubmit: (event: FormEvent) => void;
   isLoading: boolean;
-};
+}
 
 const useLoginController = (): ControllerReturn => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
-    setIsLoading(true);
     event.preventDefault();
-    console.log('handleSubmit', { email, password });
+    setIsLoading(true);
 
     try {
-      const response = await axios.post<
-        never,
-        never,
-        WrapperApi.SignIn.Request
-      >('/api/wrapper/sign-in', { login: email, password });
+      const { status, data } = await api.wrapper.account.login({
+        login: email,
+        password,
+      });
 
-      console.log({ response });
-      await router.push(routes.wrapper.worksheet.read());
+      if (status === 200 && data.cookies) {
+        dispatch(setCookies({ cookies: data.cookies }));
+        console.log({ response: data.cookies });
+
+        await router.push(routes.wrapper.worksheet.read());
+      }
     } catch (e) {
       console.error({ e });
     } finally {

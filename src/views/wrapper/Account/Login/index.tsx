@@ -48,8 +48,8 @@ const Login: FC = () => {
               required
             />
           </div>
-          <button type="submit" disabled={isLoading}>
-            Login In
+          <button type="submit">
+            {isLoading ? 'Loading...' : 'Login In'}
             <Icon.SignIn />
           </button>
           <Link href="/">Esqueceu sua senha?</Link>

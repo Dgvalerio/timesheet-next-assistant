@@ -14,8 +14,14 @@ export namespace WrapperApi {
       password: string;
     }
 
-    export interface Response {
-      cookies: Protocol.Network.Cookie[];
-    }
+    export type Response =
+      | {
+          cookies: Protocol.Network.Cookie[];
+          error?: never;
+        }
+      | {
+          cookies?: never;
+          error: string;
+        };
   }
 }
