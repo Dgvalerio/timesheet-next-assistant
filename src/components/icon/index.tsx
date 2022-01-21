@@ -15,7 +15,11 @@ import User from './user';
 
 // Fonts searched in https://iconmonstr.com/
 
-export type IconProps = { size?: number; width?: number; height?: number };
+export interface IconProps {
+  size?: number;
+  width?: number;
+  height?: number;
+}
 
 export const IconWrapper: FC<IconProps> = ({
   children,
@@ -39,7 +43,7 @@ IconWrapper.defaultProps = {
   height: 12,
 };
 
-type IconType = {
+interface IconType {
   ArrowFullLeft: FC<IconProps>;
   ArrowLeft: FC<IconProps>;
   ArrowRight: FC<IconProps>;
@@ -52,7 +56,7 @@ type IconType = {
   SignOut: FC<IconProps>;
   Speedometer: FC<IconProps>;
   User: FC<IconProps>;
-};
+}
 
 const Index: IconType = {
   ArrowFullLeft,
