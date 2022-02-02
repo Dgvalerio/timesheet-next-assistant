@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
+import { WrapperApi } from '@/types/api';
+import api from '@/utils/api';
 import { routes } from '@/utils/routes';
 
 interface ControllerReturn {
@@ -28,6 +30,8 @@ interface ControllerReturn {
   setDescription: (description: string) => void;
   handleSubmit: () => void;
   logout: () => void;
+  isLoading: boolean;
+  appointments: WrapperApi.Read.Appointment[];
 }
 
 const useWorksheetReadController = (): ControllerReturn => {
@@ -47,6 +51,10 @@ const useWorksheetReadController = (): ControllerReturn => {
   const [totalProjectTime, setTotalProjectTime] = useState<string>('');
   const [totalUtilizedTime, setTotalUtilizedTime] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [appointments, setAppointments] = useState<
+    WrapperApi.Read.Appointment[]
+  >([]);
   const { cookies } = useSelector((state) => state.user);
 
   const handleSubmit = () => {
@@ -70,9 +78,27 @@ const useWorksheetReadController = (): ControllerReturn => {
     void router.push(routes.wrapper.account.login());
   };
 
-  useEffect(() => {
-    console.log({ cookies });
+  const loadAppointments = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const { status, data } = await api.wrapper.worksheet.read({ cookies });
+
+      console.log({ status, data });
+
+      if (status === 200 && data.appointments) {
+        setAppointments(data.appointments);
+      }
+    } catch (e) {
+      console.error({ e });
+    } finally {
+      setIsLoading(false);
+    }
   }, [cookies]);
+
+  useEffect(() => {
+    if (cookies) void loadAppointments();
+  }, [cookies, loadAppointments]);
 
   return {
     client,
@@ -97,6 +123,8 @@ const useWorksheetReadController = (): ControllerReturn => {
     setDescription,
     handleSubmit,
     logout,
+    isLoading,
+    appointments,
   };
 };
 

@@ -1,21 +1,14 @@
-import { WrapperApi } from '@/types/api';
+import { API } from '@/types/api';
 
-import axios, { AxiosResponse } from 'axios';
-
-interface API {
-  wrapper: {
-    account: {
-      login: (
-        data: WrapperApi.SignIn.Request
-      ) => Promise<AxiosResponse<WrapperApi.SignIn.Response>>;
-    };
-  };
-}
+import axios from 'axios';
 
 const api: API = {
   wrapper: {
     account: {
       login: (data) => axios.post('/api/wrapper/sign-in', data),
+    },
+    worksheet: {
+      read: (data) => axios.post('/api/wrapper/read', data),
     },
   },
 };

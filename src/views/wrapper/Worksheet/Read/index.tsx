@@ -28,6 +28,7 @@ const WorksheetRead: FC = () => {
     setDescription,
     handleSubmit,
     logout,
+    appointments,
   } = useWorksheetReadController();
 
   return (
@@ -192,46 +193,40 @@ const WorksheetRead: FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>
-                  <input type="checkbox" disabled />
-                </td>
-                <td>
-                  <span className="approved">ABC</span>
-                </td>
-                <td>
-                  <button>
-                    <Icon.Pencil />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>ABC</td>
-                <td>
-                  <input type="checkbox" disabled checked />
-                </td>
-                <td>
-                  <span className="unapproved">ABC</span>
-                </td>
-                <td>
-                  <button>
-                    <Icon.Pencil />
-                  </button>
-                </td>
-              </tr>
+              {appointments.map((appointment) => (
+                <tr key={appointment.id}>
+                  <td>{appointment.cliente}</td>
+                  <td>{appointment.projeto}</td>
+                  <td>{appointment.categoria}</td>
+                  <td>{appointment.data}</td>
+                  <td>{appointment.horaInicial}</td>
+                  <td>{appointment.horaFinal}</td>
+                  <td>{appointment.total}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      disabled
+                      checked={appointment.naoContabilizado}
+                    />
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        appointment.avaliacao === 'Aprovada'
+                          ? 'approved'
+                          : 'unapproved'
+                      }
+                    >
+                      {appointment.avaliacao}
+                    </span>
+                  </td>
+                  <td>
+                    <button>
+                      <Icon.Pencil />
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
             <tfoot>
               <tr>
