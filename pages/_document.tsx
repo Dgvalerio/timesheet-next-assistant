@@ -51,7 +51,7 @@ export default class MyDocument extends Document {
    * */
   render(): ReactElement {
     return (
-      <Html>
+      <Html lang="pt-br">
         <Head />
         <body>
           <Main />
