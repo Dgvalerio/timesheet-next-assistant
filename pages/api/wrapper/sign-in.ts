@@ -1,9 +1,10 @@
 import type { NextApiRequest } from 'next';
 
 import { ApiHandler, WrapperApi } from '@/types/api';
+import { getOptions } from '@/utils/chromeOptions';
 import { wrapper } from '@/utils/wrapper';
 
-import puppeteer from 'puppeteer/lib/cjs/puppeteer/node-puppeteer-core';
+import puppeteer from 'puppeteer-core';
 
 interface Request extends NextApiRequest {
   body: WrapperApi.SignIn.Request;
@@ -17,8 +18,8 @@ const handler: ApiHandler<Request, WrapperApi.SignIn.Response> = async (
   const post = async () => {
     try {
       console.log('5%');
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
+      const browser = await puppeteer.launch(await getOptions());
+      const [page] = await browser.pages();
       await page.goto(wrapper.accountLogin);
       console.log('15%');
       await page.waitForSelector('form');

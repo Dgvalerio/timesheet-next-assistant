@@ -1,10 +1,10 @@
 import type { NextApiRequest } from 'next';
 
 import { ApiHandler, WrapperApi } from '@/types/api';
+import { getOptions } from '@/utils/chromeOptions';
 import { wrapper } from '@/utils/wrapper';
 
-import { Protocol } from 'puppeteer';
-import puppeteer from 'puppeteer/lib/cjs/puppeteer/node-puppeteer-core';
+import puppeteer, { Protocol } from 'puppeteer-core';
 
 interface Request extends NextApiRequest {
   body: WrapperApi.Read.Request;
@@ -24,7 +24,7 @@ const handler: ApiHandler<Request, WrapperApi.Read.Response> = async (
         })
       );
       console.log('5%');
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch(await getOptions());
       const [page] = await browser.pages();
       console.log('10%');
       await page.goto(wrapper.worksheetRead);
