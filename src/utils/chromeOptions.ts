@@ -20,5 +20,5 @@ export const getOptions = async (): Promise<PuppeteerLaunchOptions> =>
       }
     : {
         executablePath,
-        headless: false,
+        headless: true,
       };
