@@ -15,37 +15,39 @@ const handler: ApiHandler<Request, WrapperApi.SignIn.Response> = async (
   res
 ) => {
   console.log('0%');
+
   const post = async () => {
     try {
-      console.time('timer');
-      console.log('5%');
+      console.log('4%');
       const browser = await puppeteer.launch(await getOptions());
+      console.log('6%');
       const [page] = await browser.pages();
+      console.log('8%');
       await page.goto(wrapper.accountLogin);
-      console.log('15%');
+      console.log('10%');
       await page.waitForSelector('form');
       console.log('20%');
       await page.type('#Login', req.body.login);
-      await page.type('#Password', req.body.password);
-      console.log('25%');
-      await page.click('[type="submit"]');
       console.log('30%');
+      await page.type('#Password', req.body.password);
       console.log('40%');
-      if (page.url() !== wrapper.homeIndex)
-        return res.status(406).json({ error: 'Invalid login' });
+      await page.click('[type="submit"]');
       console.log('50%');
-      console.timeLog('timer');
-      await page.goto(wrapper.worksheetRead);
+      await page.waitForSelector('.sidebar-menu');
       console.log('60%');
-      console.timeLog('timer');
-      const cookies = await page.cookies();
+      if (page.url() !== wrapper.homeIndex) {
+        console.log("100% { error: 'Invalid login' }");
+        return res.status(406).json({ error: 'Invalid login' });
+      }
       console.log('70%');
-      await page.close();
+      const cookies = await page.cookies();
       console.log('80%');
+      await page.close();
+      console.log('90%');
       res.status(200).json({ cookies });
       console.log('100%');
-      console.timeEnd('timer');
     } catch (e) {
+      console.log('100% { error: `There was a login failure` }');
       console.error({ e });
       res
         .status(500)
@@ -58,6 +60,7 @@ const handler: ApiHandler<Request, WrapperApi.SignIn.Response> = async (
       console.log('2%');
       return post();
     default:
+      console.log("100% { error: `Method don't found` }");
       return res.status(405).json({ error: `Method don't found` });
   }
 };
