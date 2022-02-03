@@ -4,13 +4,14 @@ import { NextPage } from 'next';
 
 import Icon from '@/components/icon';
 import useListAppointmentsController from '@/views/wrapper/Worksheet/Read/components/list-appointments/controller';
+import Styles from '@/views/wrapper/Worksheet/Read/components/list-appointments/style';
 
 const ListAppointments: NextPage = () => {
   const { appointments } = useListAppointmentsController();
 
   return (
-    <>
-      <section>
+    <Styles.Container>
+      <section id="table">
         <table>
           <thead>
             <tr>
@@ -96,7 +97,7 @@ const ListAppointments: NextPage = () => {
           </tfoot>
         </table>
       </section>
-      <section>
+      <section id="info">
         <span>Mostrando de 1 até X de registros</span>
         <nav>
           <button>
@@ -110,7 +111,7 @@ const ListAppointments: NextPage = () => {
           </button>
         </nav>
       </section>
-    </>
+    </Styles.Container>
   );
 };
 

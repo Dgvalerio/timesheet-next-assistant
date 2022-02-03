@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 
 import Icon from '@/components/icon';
 import useCreateAppointmentController from '@/views/wrapper/Worksheet/Read/components/create-appointment/controller';
+import Styles from '@/views/wrapper/Worksheet/Read/components/create-appointment/style';
 
 const CreateAppointment: NextPage = () => {
   const {
@@ -29,11 +30,11 @@ const CreateAppointment: NextPage = () => {
   } = useCreateAppointmentController();
 
   return (
-    <>
-      <section>
+    <Styles.Container>
+      <section id="title">
         <p>Formulário</p>
       </section>
-      <section>
+      <section id="form">
         <form onSubmit={handleSubmit}>
           <div>
             <div>
@@ -129,7 +130,7 @@ const CreateAppointment: NextPage = () => {
           </div>
         </form>
       </section>
-    </>
+    </Styles.Container>
   );
 };
 

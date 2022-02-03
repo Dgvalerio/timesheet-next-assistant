@@ -59,7 +59,7 @@ const WorksheetRead: FC = () => {
         </header>
         <CreateAppointment />
         <ListAppointments />
-        <section>
+        <section id="footer">
           <button>
             <Icon.ArrowFullLeft /> Home
           </button>
