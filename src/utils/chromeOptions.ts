@@ -12,13 +12,13 @@ const executablePath: string =
   chromeExecPaths[process.platform as 'win32' | 'linux' | 'darwin'];
 
 export const getOptions = async (): Promise<PuppeteerLaunchOptions> =>
-  process.env.NODE_ENV === 'development'
+  process.env.AWS_REGION
     ? {
-        executablePath,
-        headless: false,
-      }
-    : {
         args: chrome.args,
         executablePath: await chrome.executablePath,
         headless: chrome.headless,
+      }
+    : {
+        executablePath,
+        headless: false,
       };
