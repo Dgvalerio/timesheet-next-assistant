@@ -17,6 +17,7 @@ const handler: ApiHandler<Request, WrapperApi.SignIn.Response> = async (
   console.log('0%');
   const post = async () => {
     try {
+      console.time('timer');
       console.log('5%');
       const browser = await puppeteer.launch(await getOptions());
       const [page] = await browser.pages();
@@ -29,19 +30,21 @@ const handler: ApiHandler<Request, WrapperApi.SignIn.Response> = async (
       console.log('25%');
       await page.click('[type="submit"]');
       console.log('30%');
-      await page.waitForNavigation();
       console.log('40%');
       if (page.url() !== wrapper.homeIndex)
         return res.status(406).json({ error: 'Invalid login' });
       console.log('50%');
+      console.timeLog('timer');
       await page.goto(wrapper.worksheetRead);
       console.log('60%');
+      console.timeLog('timer');
       const cookies = await page.cookies();
       console.log('70%');
       await page.close();
       console.log('80%');
       res.status(200).json({ cookies });
       console.log('100%');
+      console.timeEnd('timer');
     } catch (e) {
       console.error({ e });
       res
