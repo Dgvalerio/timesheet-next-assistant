@@ -6,13 +6,13 @@ import api from '@/utils/api';
 
 interface ControllerReturn {
   isLoading: boolean;
-  appointments: WrapperApi.Read.Appointment[];
+  appointments: WrapperApi.Read.Appointments.Appointment[];
 }
 
 const useListAppointmentsController = (): ControllerReturn => {
   const [isLoading, setIsLoading] = useState(false);
   const [appointments, setAppointments] = useState<
-    WrapperApi.Read.Appointment[]
+    WrapperApi.Read.Appointments.Appointment[]
   >([]);
   const { cookies } = useSelector((state) => state.user);
 
@@ -20,9 +20,9 @@ const useListAppointmentsController = (): ControllerReturn => {
     setIsLoading(true);
 
     try {
-      const { status, data } = await api.wrapper.worksheet.read({ cookies });
-
-      console.log({ status, data });
+      const { status, data } = await api.wrapper.worksheet.read.appointments({
+        cookies,
+      });
 
       if (status === 200 && data.appointments) {
         setAppointments(data.appointments);
