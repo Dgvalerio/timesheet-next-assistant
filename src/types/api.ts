@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { AxiosResponse } from 'axios';
 import Protocol from 'devtools-protocol';
@@ -27,32 +27,106 @@ export namespace WrapperApi {
   }
 
   export namespace Read {
-    export interface Request {
-      cookies: Protocol.Network.Cookie[];
+    export namespace Appointments {
+      export interface RequestBody {
+        cookies: Protocol.Network.Cookie[];
+      }
+
+      export interface Request extends NextApiRequest {
+        body: RequestBody;
+        method: 'POST';
+      }
+
+      export interface Appointment {
+        id: string;
+        cliente: string;
+        projeto: string;
+        categoria: string;
+        data: string;
+        horaInicial: string;
+        horaFinal: string;
+        total: string;
+        naoContabilizado: boolean;
+        avaliacao: string;
+      }
+
+      export type Response =
+        | {
+            appointments: Appointment[];
+            error?: never;
+          }
+        | {
+            appointments?: never;
+            error: string;
+          };
+
+      export type Handler = ApiHandler<Request, Response>;
     }
 
-    export interface Appointment {
-      id: string;
-      cliente: string;
-      projeto: string;
-      categoria: string;
-      data: string;
-      horaInicial: string;
-      horaFinal: string;
-      total: string;
-      naoContabilizado: boolean;
-      avaliacao: string;
-    }
+    export namespace Clients {
+      export interface RequestBody {
+        cookies: Protocol.Network.Cookie[];
+      }
 
-    export type Response =
-      | {
-          appointments: Appointment[];
-          error?: never;
-        }
-      | {
-          appointments?: never;
-          error: string;
-        };
+      export interface Request extends NextApiRequest {
+        body: RequestBody;
+        method: 'POST';
+      }
+
+      export interface Client {
+        id: string;
+        title: string;
+        projects: Project[];
+      }
+
+      export interface Project {
+        Id: number;
+        Name: string;
+        StartDate: string;
+        EndDate: string;
+        IdCustomer: number;
+        categories: Category[];
+        progress: ProjectProgress;
+      }
+
+      export interface Category {
+        Id: number;
+        Name: string;
+        IdProject: number;
+      }
+
+      export interface ProjectProgress {
+        Id: number;
+        IdCell: null;
+        CellName: null;
+        IdCustomer: number;
+        CustomerName: string;
+        IdProject: number;
+        ProjectName: string;
+        IsMaintenance: boolean;
+        HourLimitPerMonth: null;
+        Budget: number;
+        NotMonetize: boolean;
+        StartDate: string;
+        EndDate: string;
+        TotalTime: string;
+        TotalTimeMounth: string;
+        TotalTimeInProject: string;
+        ConsumedTimeInProject: string;
+      }
+
+      export type Response =
+        | {
+            clients: Client[];
+            error?: never;
+          }
+        | {
+            clients?: never;
+            error: string;
+          };
+
+      export type Handler = ApiHandler<Request, Response>;
+    }
   }
 }
 
@@ -64,9 +138,14 @@ export interface API {
       ) => Promise<AxiosResponse<WrapperApi.SignIn.Response>>;
     };
     worksheet: {
-      read: (
-        data: WrapperApi.Read.Request
-      ) => Promise<AxiosResponse<WrapperApi.Read.Response>>;
+      read: {
+        appointments: (
+          data: WrapperApi.Read.Appointments.RequestBody
+        ) => Promise<AxiosResponse<WrapperApi.Read.Appointments.Response>>;
+        clients: (
+          data: WrapperApi.Read.Clients.RequestBody
+        ) => Promise<AxiosResponse<WrapperApi.Read.Clients.Response>>;
+      };
     };
   };
 }

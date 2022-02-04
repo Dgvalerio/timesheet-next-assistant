@@ -1,28 +1,21 @@
-import type { NextApiRequest } from 'next';
-
-import { ApiHandler, WrapperApi } from '@/types/api';
+import { WrapperApi } from '@/types/api';
 import { getOptions } from '@/utils/chromeOptions';
 import { wrapper } from '@/utils/wrapper';
 
 import puppeteer, { Protocol } from 'puppeteer-core';
 
-interface Request extends NextApiRequest {
-  body: WrapperApi.Read.Request;
-}
-
-const handler: ApiHandler<Request, WrapperApi.Read.Response> = async (
-  req,
-  res
-) => {
+const handler: WrapperApi.Read.Appointments.Handler = async (req, res) => {
   console.log('0%');
+
   const post = async () => {
+    const cookies: Protocol.Network.CookieParam[] = req.body.cookies.map(
+      ({ name, value }) => ({
+        name,
+        value,
+      })
+    );
+
     try {
-      const cookies: Protocol.Network.CookieParam[] = req.body.cookies.map(
-        ({ name, value }) => ({
-          name,
-          value,
-        })
-      );
       console.log('5%');
       const browser = await puppeteer.launch(await getOptions());
       const [page] = await browser.pages();
@@ -41,7 +34,7 @@ const handler: ApiHandler<Request, WrapperApi.Read.Response> = async (
       await page.waitForSelector('#tbWorksheet');
       console.log('60%');
       const appointments = await page.evaluate(() => {
-        const items: WrapperApi.Read.Appointment[] = [];
+        const items: WrapperApi.Read.Appointments.Appointment[] = [];
 
         document
           .querySelectorAll('#tbWorksheet > tbody > tr')
@@ -72,9 +65,9 @@ const handler: ApiHandler<Request, WrapperApi.Read.Response> = async (
       console.log('100%');
     } catch (e) {
       console.error({ e });
-      res
-        .status(500)
-        .json({ error: `There was a login failure: ${JSON.stringify(e)}` });
+      res.status(500).json({
+        error: `There was a list appointments failure: ${JSON.stringify(e)}`,
+      });
     }
   };
 
