@@ -10,25 +10,21 @@ const Container = styled.main`
     padding: 0;
 
     table {
-      display: flex;
-      flex-direction: column;
+      width: 100%;
+      border-collapse: collapse;
 
       thead,
       tbody,
       tfoot {
         & > tr {
-          display: grid;
-          grid-template-columns: repeat(10, 1fr);
-
           &:nth-child(odd) {
             background-color: #f9f9f9;
           }
 
           th,
           td {
-            display: flex;
-            justify-content: center;
             padding: 15px 10px;
+            text-align: center;
           }
 
           td {
@@ -48,7 +44,7 @@ const Container = styled.main`
             }
 
             & > span {
-              padding: 2px 5px;
+              padding: 4px 16px;
               color: #fff;
               border-radius: 2px;
               margin: auto;
@@ -71,7 +67,7 @@ const Container = styled.main`
 
           input {
             background-color: #fff;
-            width: 100%;
+            width: 50%;
           }
         }
       }
