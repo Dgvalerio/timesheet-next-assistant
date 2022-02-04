@@ -8,7 +8,11 @@ const api: API = {
       login: (data) => axios.post('/api/wrapper/sign-in', data),
     },
     worksheet: {
-      read: (data) => axios.post('/api/wrapper/read', data),
+      read: {
+        appointments: (data) =>
+          axios.post('/api/wrapper/read-appointments', data),
+        clients: (data) => axios.post('/api/wrapper/read-clients', data),
+      },
     },
   },
 };
