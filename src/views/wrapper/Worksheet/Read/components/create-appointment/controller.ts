@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { WrapperApi } from '@/types/api';
+import api from '@/utils/api';
 
 interface ControllerReturn {
+  clients: WrapperApi.Read.Clients.Client[];
   client: string;
   setClient: (client: string) => void;
+  projects: WrapperApi.Read.Clients.Project[];
   project: string;
   setProject: (project: string) => void;
+  categories: WrapperApi.Read.Clients.Category[];
   category: string;
   setCategory: (category: string) => void;
   date: string;
@@ -15,7 +22,7 @@ interface ControllerReturn {
   setFinalTime: (finalTime: string) => void;
   accounted: string;
   setAccounted: (accounted: string) => void;
-  totalProjectTime: string;
+  totalProjectTime: number;
   totalUtilizedTime: string;
   description: string;
   setDescription: (description: string) => void;
@@ -24,8 +31,15 @@ interface ControllerReturn {
 }
 
 const useCreateAppointmentController = (): ControllerReturn => {
+  const [clients, setClients] = useState<WrapperApi.Read.Clients.Client[]>([]);
   const [client, setClient] = useState<string>('');
+  const [projects, setProjects] = useState<WrapperApi.Read.Clients.Project[]>(
+    []
+  );
   const [project, setProject] = useState<string>('');
+  const [categories, setCategories] = useState<
+    WrapperApi.Read.Clients.Category[]
+  >([]);
   const [category, setCategory] = useState<string>('');
   const [date, setDate] = useState(
     (() => {
@@ -36,10 +50,68 @@ const useCreateAppointmentController = (): ControllerReturn => {
   const [initialTime, setInitialTime] = useState<string>('');
   const [finalTime, setFinalTime] = useState<string>('');
   const [accounted, setAccounted] = useState<string>('');
-  const [totalProjectTime] = useState<string>('');
-  const [totalUtilizedTime] = useState<string>('');
+  const [totalProjectTime, setTotalProjectTime] = useState<number>(0);
+  const [totalUtilizedTime, setTotalUtilizedTime] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const { cookies } = useSelector((state) => state.user);
+
+  const loadClients = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const { status, data } = await api.wrapper.worksheet.read.clients({
+        cookies,
+      });
+
+      if (status === 200 && data.clients) {
+        setClients(data.clients);
+      }
+    } catch (e) {
+      console.error({ e });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [cookies]);
+
+  useEffect(() => {
+    if (cookies) void loadClients();
+  }, [cookies, loadClients]);
+
+  useEffect(() => {
+    if (client === '-1') {
+      setProjects([]);
+      return;
+    }
+
+    if (clients.length === 0 || client === '') return;
+
+    const selectedClient = clients.find(({ id }) => id === client);
+
+    if (!selectedClient) return;
+
+    setProjects(selectedClient.projects);
+  }, [clients, client]);
+
+  useEffect(() => {
+    if (project === '-1') {
+      setTotalProjectTime(0);
+      setTotalUtilizedTime('');
+      setCategories([]);
+      return;
+    }
+
+    if (projects.length === 0 || project === '') return;
+
+    const selectedProject = projects.find(({ Id }) => Id === +project);
+
+    if (!selectedProject) return;
+
+    setTotalProjectTime(selectedProject.progress.Budget);
+    setTotalUtilizedTime(selectedProject.progress.ConsumedTimeInProject);
+    setCategories(selectedProject.categories);
+  }, [projects, project]);
 
   const handleSubmit = () => {
     setIsLoading(true);
@@ -63,10 +135,13 @@ const useCreateAppointmentController = (): ControllerReturn => {
   };
 
   return {
+    clients,
     client,
     setClient,
+    projects,
     project,
     setProject,
+    categories,
     category,
     setCategory,
     date,

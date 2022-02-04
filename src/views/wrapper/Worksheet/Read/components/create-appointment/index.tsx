@@ -8,10 +8,13 @@ import Styles from '@/views/wrapper/Worksheet/Read/components/create-appointment
 
 const CreateAppointment: NextPage = () => {
   const {
+    clients,
     client,
     setClient,
+    projects,
     project,
     setProject,
+    categories,
     category,
     setCategory,
     date,
@@ -43,8 +46,13 @@ const CreateAppointment: NextPage = () => {
                 onChange={(event) => setClient(event.target.value)}
                 value={client}
                 required
+                disabled={clients.length <= 0}
               >
-                <option>[Selecione]</option>
+                {clients.map(({ id, title }) => (
+                  <option key={id} value={id}>
+                    {title}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -53,8 +61,14 @@ const CreateAppointment: NextPage = () => {
                 onChange={(event) => setProject(event.target.value)}
                 value={project}
                 required
+                disabled={projects.length <= 0}
               >
-                <option>[Selecione]</option>
+                <option value="-1">[Selecione]</option>
+                {projects.map(({ Id, Name }) => (
+                  <option key={Id} value={Id}>
+                    {Name}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -62,9 +76,14 @@ const CreateAppointment: NextPage = () => {
               <select
                 onChange={(event) => setCategory(event.target.value)}
                 value={category}
-                required
+                disabled={categories.length <= 0}
               >
-                <option>[Selecione]</option>
+                <option value="-1">[Selecione]</option>
+                {categories.map(({ Id, Name }) => (
+                  <option key={Id} value={Id}>
+                    {Name}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -107,11 +126,11 @@ const CreateAppointment: NextPage = () => {
             </div>
             <div>
               <label>Total de Horas no Projeto</label>
-              <input type="time" disabled value={totalProjectTime} />
+              <input type="number" disabled value={totalProjectTime} />
             </div>
             <div>
               <label>Total de Horas Utilizadas</label>
-              <input type="time" disabled value={totalUtilizedTime} />
+              <input type="text" disabled value={totalUtilizedTime} />
             </div>
           </div>
           <div>
