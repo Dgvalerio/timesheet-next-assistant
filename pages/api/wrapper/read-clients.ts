@@ -156,7 +156,7 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
 
             console.log(`50.${index}%`);
 
-            return { id, title, projects };
+            return { id: id || '-1', title, projects };
           });
 
         console.log('60%');
