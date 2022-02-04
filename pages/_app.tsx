@@ -3,10 +3,11 @@ import { Provider } from 'react-redux';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import { store } from '@/store';
+import { toPersist, store } from '@/store';
 import GlobalStyle from '@/styles/global';
 import theme from '@/styles/theme';
 
+import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
@@ -21,7 +22,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
       <link rel="icon" href="/fav.png" />
     </Head>
     <Provider store={store}>
-      <Component {...pageProps} />
+      <PersistGate persistor={toPersist}>
+        <Component {...pageProps} />
+      </PersistGate>
     </Provider>
     <GlobalStyle />
   </ThemeProvider>
