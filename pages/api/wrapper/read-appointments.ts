@@ -2,10 +2,17 @@ import { WrapperApi } from '@/types/api';
 import { getOptions } from '@/utils/chromeOptions';
 import { wrapper } from '@/utils/wrapper';
 
-import puppeteer, { Protocol } from 'puppeteer-core';
+import puppeteer, { Protocol, PuppeteerErrors } from 'puppeteer-core';
 
 const handler: WrapperApi.Read.Appointments.Handler = async (req, res) => {
-  console.log('0%');
+  let requestProgress = 0;
+
+  const loggerProgress = (progressPercentage: number) => {
+    requestProgress = progressPercentage;
+    console.log(`${requestProgress}% on ${req.url}`);
+  };
+
+  loggerProgress(0);
 
   const post = async () => {
     const cookies: Protocol.Network.CookieParam[] = req.body.cookies.map(
@@ -15,24 +22,25 @@ const handler: WrapperApi.Read.Appointments.Handler = async (req, res) => {
       })
     );
 
+    loggerProgress(5);
+    const browser = await puppeteer.launch(await getOptions());
+    const [page] = await browser.pages();
+
     try {
-      console.log('5%');
-      const browser = await puppeteer.launch(await getOptions());
-      const [page] = await browser.pages();
-      console.log('10%');
+      loggerProgress(10);
       await page.goto(wrapper.worksheetRead);
-      console.log('20%');
+      loggerProgress(20);
       const loadCookies = cookies.map(async (cookie, index) => {
-        console.log(`20.${index}%`);
+        loggerProgress(+`20.${index}`);
         return await page.setCookie(cookie);
       });
-      console.log('30%');
+      loggerProgress(30);
       await Promise.all(loadCookies);
-      console.log('40%');
+      loggerProgress(40);
       await page.goto(wrapper.worksheetRead);
-      console.log('50%');
+      loggerProgress(50);
       await page.waitForSelector('#tbWorksheet');
-      console.log('60%');
+      loggerProgress(60);
       const appointments = await page.evaluate(() => {
         const items: WrapperApi.Read.Appointments.Appointment[] = [];
 
@@ -58,29 +66,52 @@ const handler: WrapperApi.Read.Appointments.Handler = async (req, res) => {
 
         return items;
       });
-      console.log('70%');
-      await page.close();
-      console.log('80%');
+      loggerProgress(70);
       res.status(200).json({ appointments });
-      console.log('100%');
+      loggerProgress(80);
     } catch (e) {
       console.error({ e });
-      res.status(500).json({
-        error: `There was a list appointments failure: ${JSON.stringify(e)}`,
-      });
+
+      if (
+        (<Error>e).message ===
+        'waiting for selector `#tbWorksheet` failed: timeout 30000ms exceeded'
+      ) {
+        try {
+          await page.waitForSelector('.login-container');
+          res.status(401).json({ error: `Cookies are invalid!` });
+          loggerProgress(90);
+        } catch (e2) {
+          res.status(500).json({
+            error: `There was a list appointments failure: ${
+              (<PuppeteerErrors>e2).message
+            }`,
+          });
+          loggerProgress(90);
+        }
+      } else {
+        res.status(500).json({
+          error: `There was a list appointments failure: ${
+            (<PuppeteerErrors>e).message
+          }`,
+        });
+        loggerProgress(90);
+      }
+    } finally {
+      await page.close();
+      loggerProgress(100);
     }
   };
 
   switch (req.method) {
     case 'POST':
       if (!req.body.cookies || req.body.cookies.length === 0) {
-        console.log('100%');
+        loggerProgress(100);
         return res.status(401).json({ error: `Cookies not informed` });
       }
-      console.log('2%');
+      loggerProgress(2);
       return post();
     default:
-      console.log('100%');
+      loggerProgress(100);
       return res.status(405).json({ error: `Method don't found` });
   }
 };
