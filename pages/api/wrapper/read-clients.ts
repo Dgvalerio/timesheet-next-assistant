@@ -3,7 +3,14 @@ import { WrapperApi } from '@/types/api';
 import axios from 'axios';
 
 const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
-  console.log('0%');
+  let requestProgress = 0;
+
+  const loggerProgress = (progressPercentage: number) => {
+    requestProgress = progressPercentage;
+    console.log(`${requestProgress}% on ${req.url}`);
+  };
+
+  loggerProgress(0);
 
   const post = async () => {
     const cookie: string = req.body.cookies.reduce(
@@ -11,7 +18,7 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
       ''
     );
 
-    console.log('4%');
+    loggerProgress(4);
 
     const api = axios.create({
       baseURL: 'https://luby-timesheet.azurewebsites.net',
@@ -30,7 +37,7 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
       },
     });
 
-    console.log('6%');
+    loggerProgress(6);
 
     /**
      * ReadCategory
@@ -98,7 +105,7 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
       idCustomer: number
     ): Promise<WrapperApi.Read.Clients.Project[]> => {
       try {
-        console.log('20%');
+        loggerProgress(20);
         const { data } = await api.post<
           {
             Id: number;
@@ -111,14 +118,14 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
 
         const projects = await data.map(async (project, index) => {
           const categories = await listCategories(project.Id);
-          console.log(`30.${index}%`);
+          loggerProgress(+`30.${index}`);
           const progress = await showProjectProgress(project.Id);
-          console.log(`40.${index}%`);
+          loggerProgress(+`40.${index}`);
 
           return { ...project, categories, progress };
         });
 
-        console.log('70%');
+        loggerProgress(70);
         return await Promise.all(projects);
       } catch (e) {
         console.error('Error on list projects: ', e);
@@ -131,7 +138,7 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
      * */
     const listClients = async () => {
       try {
-        console.log('10%');
+        loggerProgress(10);
         const response = await api.get('/Worksheet/Read');
 
         const html: string = response.data;
@@ -144,7 +151,15 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
 
         const values = cleanedSearch.match(/value="([\S\s]+?)??">([\S\s]+?)</g);
 
-        if (!values) return [];
+        if (!values) {
+          if (html.match('<div class="login-content">')) {
+            res.status(401).json({ error: `Cookies are invalid!` });
+          } else {
+            res.status(500).json({ error: 'Options not found!' });
+          }
+          loggerProgress(100);
+          return;
+        }
 
         const clientsPromise: Promise<WrapperApi.Read.Clients.Client>[] =
           values.map(async (option, index) => {
@@ -154,29 +169,29 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
 
             const projects = await listProjects(+id);
 
-            console.log(`50.${index}%`);
+            loggerProgress(+`50.${index}`);
 
             return { id: id || '-1', title, projects };
           });
 
-        console.log('60%');
+        loggerProgress(60);
 
         const clients: WrapperApi.Read.Clients.Client[] = await Promise.all(
           clientsPromise
         );
 
-        console.log('70%');
+        loggerProgress(70);
 
         res.status(200).json({ clients });
 
-        console.log('100%');
+        loggerProgress(100);
       } catch (e) {
-        console.log('100%');
+        loggerProgress(100);
         console.error('Error on list clients: ', e);
       }
     };
 
-    console.log('8%');
+    loggerProgress(8);
 
     await listClients();
   };
@@ -184,13 +199,13 @@ const handler: WrapperApi.Read.Clients.Handler = async (req, res) => {
   switch (req.method) {
     case 'POST':
       if (!req.body.cookies || req.body.cookies.length === 0) {
-        console.log('100%');
+        loggerProgress(100);
         return res.status(401).json({ error: `Cookies not informed` });
       }
-      console.log('2%');
+      loggerProgress(2);
       return post();
     default:
-      console.log('100%');
+      loggerProgress(100);
       return res.status(405).json({ error: `Method don't found` });
   }
 };
