@@ -16,6 +16,7 @@ const Container = styled.main`
     flex-direction: column;
     flex: 1;
     gap: 1rem;
+    width: 100%;
 
     label {
       font-weight: bold;
@@ -23,45 +24,40 @@ const Container = styled.main`
     }
 
     & > div {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      display: flex;
       column-gap: 1rem;
 
-      &:nth-child(2) > div:first-child {
+      .checkbox-group {
         flex-direction: row;
         gap: 0.2rem;
       }
 
-      &:nth-child(3) {
-        grid-template-columns: 5fr 1fr;
+      .button-group {
+        display: block;
 
-        & > div {
-          display: block;
+        button {
+          display: flex;
+          align-items: stretch;
+          background-color: #00a651;
+          border: none;
+          border-radius: 4px;
+          padding: 0;
 
-          button {
-            display: flex;
-            align-items: stretch;
-            background-color: #00a651;
-            border: none;
-            border-radius: 4px;
-            padding: 0;
+          span,
+          svg {
+            padding: 6px 12px;
+            color: #fff;
+          }
 
-            span,
-            svg {
-              padding: 6px 12px;
-              color: #fff;
-            }
+          svg {
+            background-color: #007d3d;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            width: 10px;
+            height: auto;
 
-            svg {
-              background-color: #007d3d;
-              border-top-right-radius: 4px;
-              border-bottom-right-radius: 4px;
-              width: 10px;
-              height: auto;
-
-              path {
-                fill: #fff;
-              }
+            path {
+              fill: #fff;
             }
           }
         }
@@ -71,6 +67,14 @@ const Container = styled.main`
         display: flex;
         flex-direction: column;
         row-gap: 0.4rem;
+        flex: 1;
+        min-width: calc((100% - 80px) / 6) !important;
+        max-width: calc((100% - 80px) / 6) !important;
+
+        &.textarea-group {
+          min-width: calc((100% / 6) * 5) !important;
+          max-width: calc((100% / 6) * 5) !important;
+        }
       }
     }
   }

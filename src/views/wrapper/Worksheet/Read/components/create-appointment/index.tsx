@@ -115,7 +115,7 @@ const CreateAppointment: NextPage = () => {
             </div>
           </div>
           <div>
-            <div>
+            <div className="checkbox-group">
               <label>Não Contabilizado?</label>
               <input
                 type="checkbox"
@@ -134,13 +134,15 @@ const CreateAppointment: NextPage = () => {
             </div>
           </div>
           <div>
-            <textarea
-              placeholder="Informe a Descrição"
-              onChange={(event) => setDescription(event.target.value)}
-              value={description}
-              required
-            />
-            <div>
+            <div className="textarea-group">
+              <textarea
+                placeholder="Informe a Descrição"
+                onChange={(event) => setDescription(event.target.value)}
+                value={description}
+                required
+              />
+            </div>
+            <div className="button-group">
               <button type="submit">
                 <span>Adicionar</span>
                 <Icon.Check />
