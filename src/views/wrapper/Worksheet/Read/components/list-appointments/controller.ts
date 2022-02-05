@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { setCookies } from '@/store/user/actions';
 import { WrapperApi } from '@/types/api';
 import api from '@/utils/api';
+
+import { AxiosError } from 'axios';
 
 interface ControllerReturn {
   isLoading: boolean;
@@ -14,6 +17,8 @@ const useListAppointmentsController = (): ControllerReturn => {
   const [appointments, setAppointments] = useState<
     WrapperApi.Read.Appointments.Appointment[]
   >([]);
+
+  const dispatch = useDispatch();
   const { cookies } = useSelector((state) => state.user);
 
   const loadAppointments = useCallback(async () => {
@@ -28,11 +33,14 @@ const useListAppointmentsController = (): ControllerReturn => {
         setAppointments(data.appointments);
       }
     } catch (e) {
+      if ((<AxiosError>e).response?.status === 401) {
+        dispatch(setCookies({ cookies: [] }));
+      }
       console.error({ e });
     } finally {
       setIsLoading(false);
     }
-  }, [cookies]);
+  }, [cookies, dispatch]);
 
   useEffect(() => {
     if (cookies) void loadAppointments();
