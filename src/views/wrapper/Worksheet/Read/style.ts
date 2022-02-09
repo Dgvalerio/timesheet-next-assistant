@@ -129,6 +129,10 @@ const Container = styled.main`
       border-radius: 2px;
       background-color: transparent;
       color: #555;
+
+      &:disabled {
+        background-color: #eeeeee;
+      }
     }
 
     > section#footer {
