@@ -1,14 +1,12 @@
 import { GetServerSideProps } from 'next';
 import { getProviders } from 'next-auth/react';
 
-import Home, { HomeParams } from '@/views/auth';
+import Auth, { AuthParams } from '@/views/auth';
 
-export const getServerSideProps: GetServerSideProps<HomeParams> = async () => {
+export const getServerSideProps: GetServerSideProps<AuthParams> = async () => {
   const providers = await getProviders();
 
-  return {
-    props: { providers },
-  };
+  return { props: { providers } };
 };
 
-export default Home;
+export default Auth;
