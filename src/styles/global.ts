@@ -21,6 +21,10 @@ const GlobalStyle = createGlobalStyle`
       color: ${({ theme }) => theme.colors.text};
     }
   }
+
+  button {
+    cursor: pointer;
+  }
 `;
 
 export default GlobalStyle;
