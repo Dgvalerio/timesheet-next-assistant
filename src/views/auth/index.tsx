@@ -4,18 +4,18 @@ import { ClientSafeProvider, signIn, signOut } from 'next-auth/react';
 import { LiteralUnion } from 'next-auth/react/types';
 
 import Loading from '@/components/loading';
-import useHomeController from '@/views/home/controller';
-import Styles from '@/views/home/style';
+import useAuthController from '@/views/auth/controller';
+import Styles from '@/views/auth/style';
 
-export interface HomeParams {
+export interface AuthParams {
   providers: Record<
     LiteralUnion<BuiltInProviderType>,
     ClientSafeProvider
   > | null;
 }
 
-const Home: NextPage<HomeParams> = ({ providers }) => {
-  const { session, status } = useHomeController();
+const Auth: NextPage<AuthParams> = ({ providers }) => {
+  const { session, status } = useAuthController();
 
   if (status === 'loading' || !providers) return <Loading />;
 
@@ -39,11 +39,13 @@ const Home: NextPage<HomeParams> = ({ providers }) => {
 
   return (
     <Styles.Container>
-      <h1>To Timesheet</h1>
-      Signed in as {session.user?.email} <br />
-      <button onClick={() => signOut()}>Sign out</button>
+      <h1>Bem vindo ao Timesheet</h1>
+      <p>
+        Você está logado como <i>{session.user?.email}</i>
+      </p>
+      <button onClick={() => signOut()}>Sair</button>
     </Styles.Container>
   );
 };
 
-export default Home;
+export default Auth;

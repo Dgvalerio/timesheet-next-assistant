@@ -6,10 +6,10 @@ interface ControllerReturn {
   status: 'authenticated' | 'loading' | 'unauthenticated';
 }
 
-const useHomeController = (): ControllerReturn => {
+const useAuthController = (): ControllerReturn => {
   const { data: session, status } = useSession();
 
   return { session, status };
 };
 
-export default useHomeController;
+export default useAuthController;

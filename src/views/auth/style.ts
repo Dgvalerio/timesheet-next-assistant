@@ -31,6 +31,6 @@ const Container = styled.main`
   }
 `;
 
-const HomeStyles = { Container };
+const AuthStyles = { Container };
 
-export default HomeStyles;
+export default AuthStyles;
