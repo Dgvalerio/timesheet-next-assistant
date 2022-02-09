@@ -39,7 +39,7 @@ const handler: WrapperApi.Read.Appointments.Handler = async (req, res) => {
       loggerProgress(40);
       await page.goto(wrapper.worksheetRead);
       loggerProgress(50);
-      await page.waitForSelector('#tbWorksheet');
+      await page.waitForSelector('#tbWorksheet', { timeout: 3000 });
       loggerProgress(60);
       const appointments = await page.evaluate(() => {
         const items: WrapperApi.Read.Appointments.Appointment[] = [];
@@ -74,7 +74,7 @@ const handler: WrapperApi.Read.Appointments.Handler = async (req, res) => {
 
       if (
         (<Error>e).message ===
-        'waiting for selector `#tbWorksheet` failed: timeout 30000ms exceeded'
+        'waiting for selector `#tbWorksheet` failed: timeout 3000ms exceeded'
       ) {
         try {
           await page.waitForSelector('.login-container');
