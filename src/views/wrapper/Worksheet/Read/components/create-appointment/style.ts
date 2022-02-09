@@ -43,6 +43,10 @@ const Container = styled.main`
           border-radius: 4px;
           padding: 0;
 
+          &:active {
+            background-color: #007d3d;
+          }
+
           span,
           svg {
             padding: 6px 12px;

@@ -13,6 +13,10 @@ const api: API = {
           axios.post('/api/wrapper/read-appointments', data),
         clients: (data) => axios.post('/api/wrapper/read-clients', data),
       },
+      create: {
+        appointment: (data) =>
+          axios.post('/api/wrapper/create-appointment', data),
+      },
     },
   },
 };

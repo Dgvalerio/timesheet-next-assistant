@@ -1183,6 +1183,11 @@ devtools-protocol@0.0.948846:
   resolved "https://registry.yarnpkg.com/devtools-protocol/-/devtools-protocol-0.0.948846.tgz#bff47e2d1dba060130fa40ed2e5f78b916ba285f"
   integrity sha512-5fGyt9xmMqUl2VI7+rnUkKCiAQIpLns8sfQtTENy5L70ktbNw0Z3TFJ1JoFNYdx/jffz4YXU45VF75wKZD7sZQ==
 
+devtools-protocol@^0.0.967529:
+  version "0.0.967529"
+  resolved "https://registry.yarnpkg.com/devtools-protocol/-/devtools-protocol-0.0.967529.tgz#6ca1581297e03c2e08848e7e1310737232553a1e"
+  integrity sha512-KgiLP8uHfrCPV0PAK8NW9WIlk5Poy2rvFU8kLWeyqOkL2HEz62ZUs2qRDNbUw/tuTHV6X+Vvf7Gqfj+MF+Sq0g==
+
 diffie-hellman@^5.0.0:
   version "5.0.3"
   resolved "https://registry.npmjs.org/diffie-hellman/-/diffie-hellman-5.0.3.tgz"

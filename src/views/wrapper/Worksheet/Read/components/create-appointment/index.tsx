@@ -77,6 +77,7 @@ const CreateAppointment: NextPage = () => {
                 onChange={(event) => setCategory(event.target.value)}
                 value={category}
                 disabled={categories.length <= 0}
+                required
               >
                 <option value="-1">[Selecione]</option>
                 {categories.map(({ Id, Name }) => (
@@ -119,9 +120,8 @@ const CreateAppointment: NextPage = () => {
               <label>Não Contabilizado?</label>
               <input
                 type="checkbox"
-                onChange={(event) => setAccounted(event.target.value)}
-                value={accounted}
-                required
+                onChange={(event) => setAccounted(event.target.checked)}
+                checked={accounted}
               />
             </div>
             <div>

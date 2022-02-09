@@ -128,6 +128,39 @@ export namespace WrapperApi {
       export type Handler = ApiHandler<Request, Response>;
     }
   }
+
+  export namespace Create {
+    export namespace Appointment {
+      export interface RequestBody {
+        cookies: Protocol.Network.Cookie[];
+        customer: string;
+        project: string;
+        category: string;
+        informedDate: string;
+        startTime: string;
+        endTime: string;
+        notMonetize: boolean;
+        description: string;
+      }
+
+      export interface Request extends NextApiRequest {
+        body: RequestBody;
+        method: 'POST';
+      }
+
+      export type Response =
+        | {
+            data: string;
+            error?: never;
+          }
+        | {
+            data?: never;
+            error: string;
+          };
+
+      export type Handler = ApiHandler<Request, Response>;
+    }
+  }
 }
 
 export interface API {
@@ -145,6 +178,11 @@ export interface API {
         clients: (
           data: WrapperApi.Read.Clients.RequestBody
         ) => Promise<AxiosResponse<WrapperApi.Read.Clients.Response>>;
+      };
+      create: {
+        appointment: (
+          data: WrapperApi.Create.Appointment.RequestBody
+        ) => Promise<AxiosResponse<WrapperApi.Create.Appointment.Response>>;
       };
     };
   };
