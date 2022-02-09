@@ -1,5 +1,7 @@
 import { Provider } from 'react-redux';
 
+import { NextPage } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
@@ -10,7 +12,10 @@ import theme from '@/styles/theme';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
 
-const MyApp = ({ Component, pageProps }: AppProps) => (
+const MyApp: NextPage<AppProps> = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}) => (
   <ThemeProvider theme={theme}>
     <Head>
       <meta charSet="utf-8" />
@@ -23,7 +28,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
     </Head>
     <Provider store={store}>
       <PersistGate persistor={toPersist}>
-        <Component {...pageProps} />
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </PersistGate>
     </Provider>
     <GlobalStyle />

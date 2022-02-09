@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
-type ControllerReturn = {
-  entered: string;
-  setEntered: (entered: string) => void;
-};
+interface ControllerReturn {
+  session: Session | null;
+  status: 'authenticated' | 'loading' | 'unauthenticated';
+}
 
 const useHomeController = (): ControllerReturn => {
-  const [entered, setEntered] = useState('');
+  const { data: session, status } = useSession();
 
-  return { entered, setEntered };
+  return { session, status };
 };
 
 export default useHomeController;
