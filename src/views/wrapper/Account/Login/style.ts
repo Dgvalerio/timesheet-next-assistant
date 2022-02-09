@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Container = styled.main`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.azure.colors.backgroundDark};
+  background-color: ${({ theme }) => theme.palette.background.default};
   flex: 1;
 
   section {
@@ -22,7 +22,7 @@ const Container = styled.main`
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background-color: ${({ theme }) => theme.azure.colors.backgroundLight};
+    background-color: ${({ theme }) => theme.palette.background.paper};
 
     div {
       display: flex;
@@ -33,7 +33,7 @@ const Container = styled.main`
 
       p {
         font-size: 0.8rem;
-        color: ${({ theme }) => theme.azure.colors.text};
+        color: ${({ theme }) => theme.palette.text.primary};
       }
     }
 
@@ -43,8 +43,7 @@ const Container = styled.main`
 
       border-left: 1rem solid transparent;
       border-right: 1rem solid transparent;
-      border-top: 1rem solid
-        ${({ theme }) => theme.azure.colors.backgroundLight};
+      border-top: 1rem solid ${({ theme }) => theme.palette.background.paper};
     }
   }
 
@@ -61,7 +60,7 @@ const Container = styled.main`
         align-items: center;
         flex: 1;
         border-radius: 0.2rem;
-        background-color: ${({ theme }) => theme.azure.colors.backgroundLight};
+        background-color: ${({ theme }) => theme.palette.background.paper};
 
         svg {
           padding: 0 1rem;
@@ -96,7 +95,7 @@ const Container = styled.main`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: ${({ theme }) => theme.azure.colors.backgroundDark};
+        background-color: ${({ theme }) => theme.palette.background.default};
         border: 1px solid #454a54;
         cursor: pointer;
         border-radius: 0.2rem;
@@ -107,8 +106,7 @@ const Container = styled.main`
         }
 
         &:hover {
-          background-color: ${({ theme }) =>
-            theme.azure.colors.backgroundLight};
+          background-color: ${({ theme }) => theme.palette.background.paper};
         }
       }
 
@@ -116,7 +114,7 @@ const Container = styled.main`
         margin-top: 2rem;
         text-align: center;
         text-decoration: none;
-        color: ${({ theme }) => theme.azure.colors.text};
+        color: ${({ theme }) => theme.palette.text.primary};
         font-size: 0.9rem;
       }
     }

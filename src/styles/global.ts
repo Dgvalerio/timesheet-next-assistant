@@ -17,8 +17,8 @@ const GlobalStyle = createGlobalStyle`
       align-items: stretch;
       justify-content: stretch;
 
-      background-color: ${({ theme }) => theme.colors.background};
-      color: ${({ theme }) => theme.colors.text};
+      background-color: ${({ theme }) => theme.palette.background.default};
+      color: ${({ theme }) => theme.palette.text.primary};
     }
   }
 

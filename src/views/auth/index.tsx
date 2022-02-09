@@ -6,6 +6,7 @@ import { LiteralUnion } from 'next-auth/react/types';
 import Loading from '@/components/loading';
 import useAuthController from '@/views/auth/controller';
 import Styles from '@/views/auth/style';
+import { Button } from '@mui/material';
 
 export interface AuthParams {
   providers: Record<
@@ -28,9 +29,9 @@ const Auth: NextPage<AuthParams> = ({ providers }) => {
         </h2>
         {Object.values(providers).map((provider) => (
           <div key={provider.name}>
-            <button onClick={() => signIn(provider.id)}>
+            <Button variant="outlined" onClick={() => signIn(provider.id)}>
               Conectar com {provider.name}
-            </button>
+            </Button>
           </div>
         ))}
       </Styles.Container>
@@ -43,7 +44,9 @@ const Auth: NextPage<AuthParams> = ({ providers }) => {
       <p>
         Você está logado como <i>{session.user?.email}</i>
       </p>
-      <button onClick={() => signOut()}>Sair</button>
+      <Button variant="outlined" onClick={() => signOut()}>
+        Sair
+      </Button>
     </Styles.Container>
   );
 };

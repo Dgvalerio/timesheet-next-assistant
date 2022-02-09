@@ -7,7 +7,7 @@ const Container = styled.main`
 
   aside {
     width: 280px;
-    background-color: ${({ theme }) => theme.azure.colors.backgroundDark};
+    background-color: ${({ theme }) => theme.palette.background.default};
 
     & > div {
       padding: 35px;
@@ -46,7 +46,7 @@ const Container = styled.main`
     flex-direction: column;
     justify-content: stretch;
     background-color: white;
-    color: ${({ theme }) => theme.azure.colors.backgroundLight};
+    color: ${({ theme }) => theme.palette.background.paper};
     padding: 20px;
 
     header {
