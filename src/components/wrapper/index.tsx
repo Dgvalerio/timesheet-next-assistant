@@ -4,27 +4,8 @@ import Loading from '@/components/loading';
 import SideBar from '@/components/sidebar';
 import TopBar from '@/components/topbar';
 import useWrapperController from '@/components/wrapper/controller';
-import { Grid, Box } from '@mui/material';
-
-import styled from 'styled-components';
-
-const Container = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-
-  .MuiGrid-root {
-    margin: 0;
-
-    .MuiGrid-item:not(.logo) {
-      padding: 0;
-    }
-
-    &.main {
-      flex: 1;
-    }
-  }
-`;
+import Styles from '@/components/wrapper/style';
+import { Grid } from '@mui/material';
 
 const Wrapper: FC = ({ children }) => {
   const { session, status, goHome } = useWrapperController();
@@ -36,7 +17,7 @@ const Wrapper: FC = ({ children }) => {
   if (!session || !session.user) return <Loading />;
 
   return (
-    <Container>
+    <Styles.Container>
       <TopBar user={session.user} />
       <Grid container className="main">
         <SideBar />
@@ -44,7 +25,7 @@ const Wrapper: FC = ({ children }) => {
           {children}
         </Grid>
       </Grid>
-    </Container>
+    </Styles.Container>
   );
 };
 
