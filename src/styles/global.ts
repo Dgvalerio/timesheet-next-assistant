@@ -1,3 +1,5 @@
+import { darken } from '@mui/system';
+
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
@@ -5,6 +7,27 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     outline: none;
     font-family: "Helvetica Neue", Helvetica, "Noto Sans", sans-serif;
+
+    &::selection {
+      background-color: ${({ theme }) => theme.palette.primary.dark};
+      color: ${({ theme }) => theme.palette.primary.contrastText};
+    }
+
+    &::-webkit-scrollbar {
+      height: 4px;
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: ${({ theme }) =>
+        darken(theme.palette.background.default, 0.2)};
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) =>
+        darken(theme.palette.primary.dark, 0.4)};
+      border-radius: 0.6rem;
+    }
   }
 
   body {
