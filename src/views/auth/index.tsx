@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { BuiltInProviderType } from 'next-auth/providers';
-import { ClientSafeProvider, signIn, signOut } from 'next-auth/react';
+import { ClientSafeProvider, signIn } from 'next-auth/react';
 import { LiteralUnion } from 'next-auth/react/types';
 
 import Loading from '@/components/loading';
@@ -16,7 +16,7 @@ export interface AuthParams {
 }
 
 const Auth: NextPage<AuthParams> = ({ providers }) => {
-  const { session, status } = useAuthController();
+  const { session, status, goHome } = useAuthController();
 
   if (status === 'loading' || !providers) return <Loading />;
 
@@ -38,17 +38,9 @@ const Auth: NextPage<AuthParams> = ({ providers }) => {
     );
   }
 
-  return (
-    <Styles.Container>
-      <h1>Bem vindo ao Timesheet</h1>
-      <p>
-        Você está logado como <i>{session.user?.email}</i>
-      </p>
-      <Button variant="outlined" onClick={() => signOut()}>
-        Sair
-      </Button>
-    </Styles.Container>
-  );
+  if (status === 'authenticated') goHome();
+
+  return <Loading />;
 };
 
 export default Auth;
