@@ -1,8 +1,8 @@
-import { NextPage } from 'next';
+import { FC } from 'react';
 
 import Styles from '@/components/loading/style';
 
-const Loading: NextPage = () => (
+const Loading: FC = () => (
   <Styles.Container>
     <div id="clock" aria-label="Loading">
       <div id="hour-hand" />
