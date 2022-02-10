@@ -19,6 +19,8 @@ const MyApp: NextPage<AppProps> = ({
 }) => (
   <>
     <Head>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
       <title>Timesheet Assistant</title>
       <meta
         name="description"
