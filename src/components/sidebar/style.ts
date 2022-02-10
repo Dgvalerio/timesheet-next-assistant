@@ -1,9 +1,14 @@
+import { UserStore } from '@/store/user/slice';
 import { Grid } from '@mui/material';
 
+import { transparentize } from 'polished';
 import styled from 'styled-components';
 
 const Container = styled(Grid)`
-  background-color: #f1f2f7;
+  background-color: ${({ theme }) =>
+    theme.palette.mode === UserStore.ThemeMode.Light
+      ? '#f1f2f7'
+      : transparentize(0.98, '#f1f2f7')};
 
   .MuiList-root {
     padding: 1rem;
