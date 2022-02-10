@@ -8,13 +8,8 @@ const Container = styled(Grid)`
 
   > .logo {
     background-color: #f1f2f7;
-    padding: 1rem 2rem;
+    padding: 0.7rem 2rem;
     color: ${({ theme }) => theme.palette.text.secondary};
-  }
-
-  .user-button {
-    width: 4rem;
-    height: 4rem;
   }
 `;
 
