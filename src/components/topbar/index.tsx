@@ -4,7 +4,12 @@ import { signOut } from 'next-auth/react';
 
 import useTopBarController from '@/components/topbar/controller';
 import Styles from '@/components/topbar/style';
-import { Notifications as NotificationsIcon } from '@mui/icons-material';
+import { UserStore } from '@/store/user/slice';
+import {
+  Notifications as NotificationsIcon,
+  DarkMode as DarkModeIcon,
+  LightMode as LightModeIcon,
+} from '@mui/icons-material';
 import {
   Grid,
   Typography,
@@ -19,8 +24,13 @@ import {
 const TopBar: FC<{ user: { name?: string | null; image?: string | null } }> = ({
   user,
 }) => {
-  const { anchorElUser, handleOpenUserMenu, handleCloseUserMenu } =
-    useTopBarController();
+  const {
+    anchorElUser,
+    handleOpenUserMenu,
+    handleCloseUserMenu,
+    handleSwitchThemeMode,
+    nextThemeMode,
+  } = useTopBarController();
 
   return (
     <Styles.Container
@@ -32,6 +42,20 @@ const TopBar: FC<{ user: { name?: string | null; image?: string | null } }> = ({
         <Typography variant="h6">Timesheet</Typography>
       </Grid>
       <Grid item>
+        <Tooltip title={`Trocar para ${nextThemeMode} mode`}>
+          <IconButton
+            size="large"
+            aria-label={`Trocar para ${nextThemeMode} mode`}
+            color="inherit"
+            onClick={handleSwitchThemeMode}
+          >
+            {nextThemeMode === UserStore.ThemeMode.Dark ? (
+              <LightModeIcon color="disabled" />
+            ) : (
+              <DarkModeIcon color="disabled" />
+            )}
+          </IconButton>
+        </Tooltip>
         <Tooltip title="Ver notificações">
           <IconButton
             size="large"

@@ -1,5 +1,5 @@
 import { actions } from './slice';
 
-const { setCookies } = actions;
+const { setCookies, switchThemeMode } = actions;
 
-export { setCookies };
+export { setCookies, switchThemeMode };

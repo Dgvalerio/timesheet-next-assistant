@@ -1,8 +1,9 @@
+import { UserStore } from '@/store/user/slice';
 import { createTheme } from '@mui/material';
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: UserStore.ThemeMode.Dark,
   },
 });
 

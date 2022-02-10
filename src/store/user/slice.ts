@@ -5,8 +5,14 @@ import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import Protocol from 'devtools-protocol';
 
 export namespace UserStore {
+  export enum ThemeMode {
+    Light = 'light',
+    Dark = 'dark',
+  }
+
   export interface State {
     cookies: Protocol.Network.Cookie[];
+    themeMode: ThemeMode;
   }
 
   export interface Reducers extends SliceCaseReducers<State> {
@@ -14,11 +20,13 @@ export namespace UserStore {
       State,
       PayloadAction<{ cookies: Protocol.Network.Cookie[] }>
     >;
+    switchThemeMode: CaseReducer<State>;
   }
 }
 
 const initialState: UserStore.State = {
   cookies: [],
+  themeMode: UserStore.ThemeMode.Light,
 };
 
 const userSlice = createSlice<UserStore.State, UserStore.Reducers>({
@@ -27,6 +35,12 @@ const userSlice = createSlice<UserStore.State, UserStore.Reducers>({
   reducers: {
     setCookies(state, action) {
       state.cookies = action.payload.cookies;
+    },
+    switchThemeMode(state) {
+      state.themeMode =
+        state.themeMode === UserStore.ThemeMode.Light
+          ? UserStore.ThemeMode.Dark
+          : UserStore.ThemeMode.Light;
     },
   },
 });
