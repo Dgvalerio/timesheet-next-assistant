@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { useSelector } from 'react-redux';
 
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 import { routes } from '@/utils/routes';
@@ -13,7 +12,7 @@ const Container = styled.h1`
   text-align: center;
 `;
 
-const Authenticator: NextPage = ({ children }) => {
+const Authenticator: FC = ({ children }) => {
   const router = useRouter();
   const { cookies } = useSelector((state) => state.user);
   const [authenticated, setAuthenticated] = useState(false);
