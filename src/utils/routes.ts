@@ -1,12 +1,24 @@
+export enum Routes {
+  Home = `/`,
+  Dashboard = `/dashboard`,
+  AppointmentCreate = `/appointment/create`,
+
+  WrapperAccountLogin = `/wrapper/Account/Login`,
+  WrapperWorksheetRead = `/wrapper/Worksheet/Read`,
+}
+
 export const routes = {
-  home: (): string => `/`,
-  dashboard: (): string => `/dashboard`,
+  home: (): Routes => Routes.Home,
+  dashboard: (): Routes => Routes.Dashboard,
+  appointment: {
+    create: (): Routes => Routes.AppointmentCreate,
+  },
   wrapper: {
     account: {
-      login: (): string => `/wrapper/Account/Login`,
+      login: (): Routes => Routes.WrapperAccountLogin,
     },
     worksheet: {
-      read: (): string => `/wrapper/Worksheet/Read`,
+      read: (): Routes => Routes.WrapperWorksheetRead,
     },
   },
 };
