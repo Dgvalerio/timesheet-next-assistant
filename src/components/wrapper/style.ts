@@ -7,16 +7,8 @@ const Container = styled(Box)`
   flex-direction: column;
   flex: 1;
 
-  .MuiGrid-root {
-    margin: 0;
-
-    .MuiGrid-item:not(.logo) {
-      padding: 0;
-    }
-
-    &.main {
-      flex: 1;
-    }
+  > .MuiGrid-root.main {
+    flex: 1;
   }
 `;
 
