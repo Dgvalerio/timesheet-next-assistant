@@ -1,3 +1,4 @@
+import { UserStore } from '@/store/user/slice';
 import { darken } from '@mui/system';
 
 import { createGlobalStyle } from 'styled-components';
@@ -47,6 +48,62 @@ const GlobalStyle = createGlobalStyle`
 
   button {
     cursor: pointer;
+  }
+
+  /** Used to define container behavior: width, position: fixed etc... **/
+  .Toastify__toast {
+    background-color: ${({ theme }) =>
+      theme.palette.mode === UserStore.ThemeMode.Light ? '#f1f2f7' : '#171717'};
+    color: ${({ theme }) => theme.palette.text.primary};
+    box-shadow: ${({ theme }) => theme.shadows[6]};
+
+    .Toastify__close-button {
+      color: ${({ theme }) => theme.palette.text.primary};
+    }
+  }
+
+  .Toastify__toast--info {
+    .Toastify__progress-bar--info {
+      background-color: ${({ theme }) =>
+        theme.palette.info[theme.palette.mode]};
+    }
+
+    .Toastify__toast-icon > svg {
+      fill: ${({ theme }) => theme.palette.info[theme.palette.mode]};
+    }
+  }
+
+  .Toastify__toast--success {
+    .Toastify__progress-bar--success {
+      background-color: ${({ theme }) =>
+        theme.palette.success[theme.palette.mode]};
+    }
+
+    .Toastify__toast-icon > svg {
+      fill: ${({ theme }) => theme.palette.success[theme.palette.mode]};
+    }
+  }
+
+  .Toastify__toast--warning {
+    .Toastify__progress-bar--warning {
+      background-color: ${({ theme }) =>
+        theme.palette.warning[theme.palette.mode]};
+    }
+
+    .Toastify__toast-icon > svg {
+      fill: ${({ theme }) => theme.palette.warning[theme.palette.mode]};
+    }
+  }
+
+  .Toastify__toast--error {
+    .Toastify__progress-bar--error {
+      background-color: ${({ theme }) =>
+        theme.palette.error[theme.palette.mode]};
+    }
+
+    .Toastify__toast-icon > svg {
+      fill: ${({ theme }) => theme.palette.error[theme.palette.mode]};
+    }
   }
 `;
 

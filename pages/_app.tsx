@@ -1,4 +1,5 @@
 import { Provider as ReduxProvider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 
 import { NextPage } from 'next';
 import { SessionProvider } from 'next-auth/react';
@@ -9,6 +10,8 @@ import StyleWrapper from '@/components/style-wrapper';
 import { toPersist, store } from '@/store';
 
 import { PersistGate } from 'redux-persist/integration/react';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const MyApp: NextPage<AppProps> = ({
   Component,
@@ -30,6 +33,7 @@ const MyApp: NextPage<AppProps> = ({
         <SessionProvider session={session}>
           <StyleWrapper>
             <Component {...pageProps} />
+            <ToastContainer />
           </StyleWrapper>
         </SessionProvider>
       </PersistGate>

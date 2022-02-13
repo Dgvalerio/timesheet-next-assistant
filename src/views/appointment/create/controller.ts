@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { Client, Project, Category } from '@/types/entities';
 
@@ -51,8 +52,10 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
     try {
       console.log({ event });
+      toast.success('Sucesso!');
     } catch (e) {
       console.error({ e });
+      toast.error('Falha!');
     } finally {
       setIsLoading(false);
     }
