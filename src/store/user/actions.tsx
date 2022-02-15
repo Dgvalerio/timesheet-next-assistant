@@ -11,6 +11,7 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
+  GithubAuthProvider,
 } from 'firebase/auth';
 import { Action, Dispatch } from 'redux';
 
@@ -101,6 +102,48 @@ const googleSignIn =
     }
   };
 
+const githubSignIn =
+  (toRedirect: () => void) =>
+  async (dispatch: Dispatch<Action>): Promise<void> => {
+    await dispatch(enableLoading());
+
+    try {
+      const provider = new GithubAuthProvider();
+
+      const auth = getAuth();
+      const result = await signInWithPopup(auth, provider);
+
+      if (!result.user) throw new Error();
+
+      await dispatch(
+        setUserData({
+          uid: result.user.uid || '',
+          name: result.user.displayName || '',
+          email: result.user.email || '',
+          photoURL: result.user.photoURL || '',
+        })
+      );
+
+      toRedirect();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.warn({ errorCode: error.code });
+        switch (error.code) {
+          case 'auth/user-not-found':
+            toast.error('Esse usuário não foi cadastrado!');
+            break;
+          default:
+            toast.error('Erro ao realizar login com o Github!');
+        }
+      } else {
+        toast.error('Erro ao realizar login com o Github!');
+        console.warn({ error });
+      }
+    } finally {
+      await dispatch(disableLoading());
+    }
+  };
+
 const signUp =
   (name: string, email: string, password: string, toRedirect: () => void) =>
   async (dispatch: Dispatch<Action>): Promise<void> => {
@@ -162,6 +205,10 @@ const signOut =
   async (dispatch: Dispatch<Action>): Promise<void> => {
     await dispatch(enableLoading());
 
+    const auth = await getAuth(app);
+    await auth.signOut();
+
+    toRedirect();
     try {
       await dispatch(clearUserData());
 
@@ -174,4 +221,4 @@ const signOut =
     }
   };
 
-export { setCookies, signUp, signIn, signOut, googleSignIn };
+export { setCookies, signUp, signIn, signOut, googleSignIn, githubSignIn };

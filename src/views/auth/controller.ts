@@ -1,10 +1,9 @@
 import { FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
 import { useRouter } from 'next/router';
 
-import { googleSignIn, signIn } from '@/store/user/actions';
+import { githubSignIn, googleSignIn, signIn } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
 export interface FormAuthData extends HTMLFormElement {
@@ -30,7 +29,7 @@ const useAuthController = (): ControllerReturn => {
   const goSignUp = () => void router.push(routes.signUp());
 
   const handleGithubSignIn = () => {
-    toast.success('handleGithubSignIn');
+    dispatch(githubSignIn(goHome));
   };
 
   const handleGoogleSignIn = () => {
