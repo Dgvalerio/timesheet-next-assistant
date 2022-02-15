@@ -8,17 +8,18 @@ import Styles from '@/components/wrapper/style';
 import { Grid } from '@mui/material';
 
 const Wrapper: FC = ({ children }) => {
-  const { session, status, goHome } = useWrapperController();
+  const { uid, name, image, loading, goHome } = useWrapperController();
 
-  if (status === 'loading') return <Loading />;
+  if (!uid) {
+    goHome();
+    return <Loading />;
+  }
 
-  if (status === 'unauthenticated') goHome();
-
-  if (!session || !session.user) return <Loading />;
+  if (loading) return <Loading />;
 
   return (
     <Styles.Container>
-      <TopBar user={session.user} />
+      <TopBar name={name} image={image} />
       <Grid container className="main">
         <SideBar />
         <Grid item xs={9}>

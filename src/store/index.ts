@@ -1,3 +1,4 @@
+import ui from '@/store/ui/slice';
 import user from '@/store/user/slice';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
@@ -16,9 +17,9 @@ const persistedReducer = persistReducer(
   {
     key: 'timesheet-next-assistant',
     storage,
-    whitelist: ['user'],
+    whitelist: ['user', 'ui'],
   },
-  combineReducers({ user })
+  combineReducers({ user, ui })
 );
 
 const store = configureStore({

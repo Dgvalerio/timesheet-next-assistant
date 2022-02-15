@@ -11,3 +11,5 @@
  - [ ] escolher um DB;
  - [x] dark e light mode;
  - [ ] testes automatizados!!;
+ - [ ] apontamento pre ponto (para apontamento em sequencia);
+ - [ ] editor personalizado;

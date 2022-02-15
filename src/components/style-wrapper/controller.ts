@@ -11,7 +11,7 @@ interface ControllerReturn {
 const useStyleWrapperController = (): ControllerReturn => {
   const [theme, setTheme] = useState(globalTheme);
 
-  const { themeMode } = useSelector((state) => state.user);
+  const { themeMode } = useSelector((state) => state.ui);
 
   useEffect(() => {
     setTheme(createTheme({ palette: { mode: themeMode } }));

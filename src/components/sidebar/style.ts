@@ -1,4 +1,4 @@
-import { UserStore } from '@/store/user/slice';
+import { UIStore } from '@/store/ui/slice';
 import { Grid } from '@mui/material';
 
 import { transparentize } from 'polished';
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const Container = styled(Grid)`
   background-color: ${({ theme }) =>
-    theme.palette.mode === UserStore.ThemeMode.Light
+    theme.palette.mode === UIStore.ThemeMode.Light
       ? '#f1f2f7'
       : transparentize(0.98, '#f1f2f7')};
 

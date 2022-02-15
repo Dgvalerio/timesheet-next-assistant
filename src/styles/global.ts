@@ -1,4 +1,4 @@
-import { UserStore } from '@/store/user/slice';
+import { UIStore } from '@/store/ui/slice';
 import { darken } from '@mui/system';
 
 import { createGlobalStyle } from 'styled-components';
@@ -53,7 +53,7 @@ const GlobalStyle = createGlobalStyle`
   /** Used to define container behavior: width, position: fixed etc... **/
   .Toastify__toast {
     background-color: ${({ theme }) =>
-      theme.palette.mode === UserStore.ThemeMode.Light ? '#f1f2f7' : '#171717'};
+      theme.palette.mode === UIStore.ThemeMode.Light ? '#f1f2f7' : '#171717'};
     color: ${({ theme }) => theme.palette.text.primary};
     box-shadow: ${({ theme }) => theme.shadows[6]};
 

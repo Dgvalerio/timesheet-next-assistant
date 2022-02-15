@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 
-import { signOut } from 'next-auth/react';
-
 import useTopBarController from '@/components/topbar/controller';
 import Styles from '@/components/topbar/style';
-import { UserStore } from '@/store/user/slice';
+import { UIStore } from '@/store/ui/slice';
 import {
+  AccountCircle as AccountCircleIcon,
   Notifications as NotificationsIcon,
   DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
@@ -21,15 +20,14 @@ import {
   Badge,
 } from '@mui/material';
 
-const TopBar: FC<{ user: { name?: string | null; image?: string | null } }> = ({
-  user,
-}) => {
+const TopBar: FC<{ name?: string; image?: string }> = ({ name, image }) => {
   const {
     anchorElUser,
     handleOpenUserMenu,
     handleCloseUserMenu,
     handleSwitchThemeMode,
     nextThemeMode,
+    handleSignOut,
   } = useTopBarController();
 
   return (
@@ -49,7 +47,7 @@ const TopBar: FC<{ user: { name?: string | null; image?: string | null } }> = ({
             color="inherit"
             onClick={handleSwitchThemeMode}
           >
-            {nextThemeMode === UserStore.ThemeMode.Dark ? (
+            {nextThemeMode === UIStore.ThemeMode.Dark ? (
               <LightModeIcon color="disabled" />
             ) : (
               <DarkModeIcon color="disabled" />
@@ -69,7 +67,11 @@ const TopBar: FC<{ user: { name?: string | null; image?: string | null } }> = ({
         </Tooltip>
         <Tooltip title="Abrir opções">
           <IconButton onClick={handleOpenUserMenu} className="user-button">
-            <Avatar alt={user.name || ''} src={user.image || ''} />
+            {image ? (
+              <AccountCircleIcon />
+            ) : (
+              <Avatar alt={name || ''} src={image} />
+            )}
           </IconButton>
         </Tooltip>
         <Menu
@@ -90,7 +92,7 @@ const TopBar: FC<{ user: { name?: string | null; image?: string | null } }> = ({
           <MenuItem onClick={handleCloseUserMenu}>
             <Typography textAlign="center">Perfil</Typography>
           </MenuItem>
-          <MenuItem onClick={() => signOut()}>
+          <MenuItem onClick={handleSignOut}>
             <Typography textAlign="center">Sair</Typography>
           </MenuItem>
         </Menu>

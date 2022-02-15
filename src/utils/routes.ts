@@ -1,5 +1,6 @@
 export enum Routes {
   Home = `/`,
+  SignUp = `/sign-up`,
   Dashboard = `/dashboard`,
   AppointmentCreate = `/appointment/create`,
 
@@ -9,6 +10,7 @@ export enum Routes {
 
 export const routes = {
   home: (): Routes => Routes.Home,
+  signUp: (): Routes => Routes.SignUp,
   dashboard: (): Routes => Routes.Dashboard,
   appointment: {
     create: (): Routes => Routes.AppointmentCreate,

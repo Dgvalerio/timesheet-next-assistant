@@ -5,42 +5,51 @@ import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import Protocol from 'devtools-protocol';
 
 export namespace UserStore {
-  export enum ThemeMode {
-    Light = 'light',
-    Dark = 'dark',
-  }
-
   export interface State {
+    uid?: string;
+    name?: string;
+    email?: string;
+    photoURL?: string;
     cookies: Protocol.Network.Cookie[];
-    themeMode: ThemeMode;
   }
 
   export interface Reducers extends SliceCaseReducers<State> {
+    setUserData: CaseReducer<
+      State,
+      PayloadAction<{
+        uid: string;
+        name: string;
+        email: string;
+        photoURL?: string;
+      }>
+    >;
     setCookies: CaseReducer<
       State,
       PayloadAction<{ cookies: Protocol.Network.Cookie[] }>
     >;
-    switchThemeMode: CaseReducer<State>;
+    clearUserData: CaseReducer<State>;
   }
 }
 
 const initialState: UserStore.State = {
   cookies: [],
-  themeMode: UserStore.ThemeMode.Light,
 };
 
 const userSlice = createSlice<UserStore.State, UserStore.Reducers>({
   name: 'user',
   initialState,
   reducers: {
+    setUserData(state, action) {
+      state.uid = action.payload.uid;
+      state.name = action.payload.name;
+      state.email = action.payload.email;
+      state.photoURL = action.payload.photoURL;
+    },
+    clearUserData(state) {
+      state = initialState;
+    },
     setCookies(state, action) {
       state.cookies = action.payload.cookies;
-    },
-    switchThemeMode(state) {
-      state.themeMode =
-        state.themeMode === UserStore.ThemeMode.Light
-          ? UserStore.ThemeMode.Dark
-          : UserStore.ThemeMode.Light;
     },
   },
 });

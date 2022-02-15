@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 
-import useAuthController from '@/views/auth/controller';
 import Styles from '@/views/auth/style';
+import useSignUpController from '@/views/sign-up/controller';
 import {
   Backdrop,
   Button,
@@ -11,20 +11,14 @@ import {
   Typography,
 } from '@mui/material';
 
-const Auth: NextPage = () => {
-  const {
-    goSignUp,
-    handleGithubSignIn,
-    handleGoogleSignIn,
-    handleSubmit,
-    loading,
-  } = useAuthController();
+const SignUp: NextPage = () => {
+  const { goBack, handleSubmit, loading } = useSignUpController();
 
   return (
     <Styles.Container>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={7}>
-          <Typography variant="h1">Login</Typography>
+          <Typography variant="h1">Cadastro</Typography>
         </Grid>
         <Grid
           item
@@ -33,7 +27,18 @@ const Auth: NextPage = () => {
           spacing={2}
           component="form"
           onSubmit={handleSubmit}
+          aria-autocomplete="none"
         >
+          <Grid item xs={12}>
+            <TextField
+              name="userName"
+              label="Nome"
+              variant="outlined"
+              type="text"
+              required
+              fullWidth
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextField
               name="email"
@@ -57,32 +62,28 @@ const Auth: NextPage = () => {
               fullWidth
             />
           </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="passwordConfirmation"
+              label="Confirmação de Senha"
+              variant="outlined"
+              type="password"
+              inputProps={{
+                minLength: '6',
+              }}
+              required
+              fullWidth
+            />
+          </Grid>
           <Grid item style={{ marginRight: 'auto' }}>
-            <Button variant="outlined" type="button" onClick={goSignUp}>
-              Cadastrar
+            <Button variant="outlined" type="button" onClick={goBack}>
+              Voltar
             </Button>
           </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              type="button"
-              onClick={handleGithubSignIn}
-            >
-              Login com Github
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              type="button"
-              onClick={handleGoogleSignIn}
-            >
-              Login com Google
-            </Button>
-          </Grid>
+
           <Grid item>
             <Button variant="outlined" type="submit">
-              Entrar
+              Cadastrar
             </Button>
           </Grid>
         </Grid>
@@ -94,4 +95,4 @@ const Auth: NextPage = () => {
   );
 };
 
-export default Auth;
+export default SignUp;
