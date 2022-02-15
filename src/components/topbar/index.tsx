@@ -4,7 +4,6 @@ import useTopBarController from '@/components/topbar/controller';
 import Styles from '@/components/topbar/style';
 import { UIStore } from '@/store/ui/slice';
 import {
-  AccountCircle as AccountCircleIcon,
   Notifications as NotificationsIcon,
   DarkMode as DarkModeIcon,
   LightMode as LightModeIcon,
@@ -67,11 +66,7 @@ const TopBar: FC<{ name?: string; image?: string }> = ({ name, image }) => {
         </Tooltip>
         <Tooltip title="Abrir opções">
           <IconButton onClick={handleOpenUserMenu} className="user-button">
-            {image ? (
-              <AccountCircleIcon />
-            ) : (
-              <Avatar alt={name || ''} src={image} />
-            )}
+            <Avatar alt={name || ''} src={image} />
           </IconButton>
         </Tooltip>
         <Menu

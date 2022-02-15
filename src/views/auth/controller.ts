@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import { useRouter } from 'next/router';
 
-import { signIn } from '@/store/user/actions';
+import { googleSignIn, signIn } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
 export interface FormAuthData extends HTMLFormElement {
@@ -34,7 +34,7 @@ const useAuthController = (): ControllerReturn => {
   };
 
   const handleGoogleSignIn = () => {
-    toast.success('handleGoogleSignIn');
+    dispatch(googleSignIn(goHome));
   };
 
   const handleSubmit = async (event: FormEvent<FormAuthData>) => {

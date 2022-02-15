@@ -9,6 +9,8 @@ import {
   signInWithEmailAndPassword,
   getAuth,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { Action, Dispatch } from 'redux';
 
@@ -50,6 +52,48 @@ const signIn =
         }
       } else {
         toast.error('Erro ao realizar login!');
+        console.warn({ error });
+      }
+    } finally {
+      await dispatch(disableLoading());
+    }
+  };
+
+const googleSignIn =
+  (toRedirect: () => void) =>
+  async (dispatch: Dispatch<Action>): Promise<void> => {
+    await dispatch(enableLoading());
+
+    try {
+      const provider = new GoogleAuthProvider();
+
+      const auth = getAuth();
+      const result = await signInWithPopup(auth, provider);
+
+      if (!result.user) throw new Error();
+
+      await dispatch(
+        setUserData({
+          uid: result.user.uid || '',
+          name: result.user.displayName || '',
+          email: result.user.email || '',
+          photoURL: result.user.photoURL || '',
+        })
+      );
+
+      toRedirect();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.warn({ errorCode: error.code });
+        switch (error.code) {
+          case 'auth/user-not-found':
+            toast.error('Esse usuário não foi cadastrado!');
+            break;
+          default:
+            toast.error('Erro ao realizar login com o Google!');
+        }
+      } else {
+        toast.error('Erro ao realizar login com o Google!');
         console.warn({ error });
       }
     } finally {
@@ -130,4 +174,4 @@ const signOut =
     }
   };
 
-export { setCookies, signUp, signIn, signOut };
+export { setCookies, signUp, signIn, signOut, googleSignIn };
