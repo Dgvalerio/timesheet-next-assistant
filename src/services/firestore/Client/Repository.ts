@@ -9,7 +9,16 @@ import {
 interface IClient {
   create(attributes: ClientEntity): Promise<ClientEntity>;
   list(): Promise<ClientEntity[]>;
-  show(id: ClientEntity['id']): Promise<ClientEntity>;
+
+  show(query: {
+    field: 'id';
+    value: ClientEntity['id'];
+  }): Promise<ClientEntity>;
+  show(query: {
+    field: 'title';
+    value: ClientEntity['title'];
+  }): Promise<ClientEntity>;
+
   update(attributes: WithId<Partial<ClientDocument>>): Promise<ClientEntity>;
   delete(id: ClientEntity['id']): Promise<void>;
 }

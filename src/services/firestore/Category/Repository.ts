@@ -9,7 +9,20 @@ import {
 interface ICategory {
   create(attributes: CategoryDocument): Promise<CategoryEntity>;
   list(): Promise<CategoryEntity[]>;
-  show(id: CategoryEntity['id']): Promise<CategoryEntity>;
+
+  show(query: {
+    field: 'id';
+    value: CategoryEntity['id'];
+  }): Promise<CategoryEntity>;
+  show(query: {
+    field: 'name';
+    value: CategoryEntity['name'];
+  }): Promise<CategoryEntity>;
+  show(query: {
+    field: 'projectId';
+    value: CategoryEntity['projectId'];
+  }): Promise<CategoryEntity>;
+
   update(
     attributes: WithId<Partial<CategoryDocument>>
   ): Promise<CategoryEntity>;
