@@ -13,23 +13,23 @@ interface IProject {
   show(query: {
     field: 'id';
     value: ProjectEntity['id'];
-  }): Promise<ProjectEntity>;
+  }): Promise<ProjectEntity | void>;
   show(query: {
     field: 'name';
     value: ProjectEntity['name'];
-  }): Promise<ProjectEntity>;
+  }): Promise<ProjectEntity | void>;
   show(query: {
     field: 'startDate';
     value: ProjectEntity['startDate'];
-  }): Promise<ProjectEntity>;
+  }): Promise<ProjectEntity | void>;
   show(query: {
     field: 'endDate';
     value: ProjectEntity['endDate'];
-  }): Promise<ProjectEntity>;
+  }): Promise<ProjectEntity | void>;
   show(query: {
     field: 'clientId';
     value: ProjectEntity['clientId'];
-  }): Promise<ProjectEntity>;
+  }): Promise<ProjectEntity | void>;
 
   update(attributes: WithId<Partial<ProjectDocument>>): Promise<ProjectEntity>;
   delete(id: ProjectEntity['id']): Promise<void>;

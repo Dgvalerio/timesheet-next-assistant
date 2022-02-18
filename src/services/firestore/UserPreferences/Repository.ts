@@ -13,19 +13,19 @@ interface IUserPreferences {
   show(query: {
     field: 'id';
     value: UserPreferencesEntity['id'];
-  }): Promise<UserPreferencesEntity>;
+  }): Promise<UserPreferencesEntity | void>;
   show(query: {
     field: 'userId';
     value: UserPreferencesEntity['userId'];
-  }): Promise<UserPreferencesEntity>;
+  }): Promise<UserPreferencesEntity | void>;
   show(query: {
     field: 'lubyMail';
     value: UserPreferencesEntity['lubyMail'];
-  }): Promise<UserPreferencesEntity>;
+  }): Promise<UserPreferencesEntity | void>;
   show(query: {
     field: 'lubyPass';
     value: UserPreferencesEntity['lubyPass'];
-  }): Promise<UserPreferencesEntity>;
+  }): Promise<UserPreferencesEntity | void>;
 
   update(
     attributes: WithId<Partial<UserPreferencesDocument>>

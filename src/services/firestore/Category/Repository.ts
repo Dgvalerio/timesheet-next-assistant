@@ -13,15 +13,15 @@ interface ICategory {
   show(query: {
     field: 'id';
     value: CategoryEntity['id'];
-  }): Promise<CategoryEntity>;
+  }): Promise<CategoryEntity | void>;
   show(query: {
     field: 'name';
     value: CategoryEntity['name'];
-  }): Promise<CategoryEntity>;
+  }): Promise<CategoryEntity | void>;
   show(query: {
     field: 'projectId';
     value: CategoryEntity['projectId'];
-  }): Promise<CategoryEntity>;
+  }): Promise<CategoryEntity | void>;
 
   update(
     attributes: WithId<Partial<CategoryDocument>>

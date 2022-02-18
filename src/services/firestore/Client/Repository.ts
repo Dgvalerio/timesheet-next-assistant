@@ -13,11 +13,11 @@ interface IClient {
   show(query: {
     field: 'id';
     value: ClientEntity['id'];
-  }): Promise<ClientEntity>;
+  }): Promise<ClientEntity | void>;
   show(query: {
     field: 'title';
     value: ClientEntity['title'];
-  }): Promise<ClientEntity>;
+  }): Promise<ClientEntity | void>;
 
   update(attributes: WithId<Partial<ClientDocument>>): Promise<ClientEntity>;
   delete(id: ClientEntity['id']): Promise<void>;
