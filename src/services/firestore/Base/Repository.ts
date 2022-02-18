@@ -5,18 +5,23 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   setDoc,
   updateDoc,
+  query,
+  where,
 } from '@firebase/firestore';
 
 interface IBase<GenericDocument> {
   create(attributes: WithId<GenericDocument>): Promise<WithId<GenericDocument>>;
   list(): Promise<WithId<GenericDocument>[]>;
-  show(
-    id: string | WithId<GenericDocument>['id']
-  ): Promise<WithId<GenericDocument>>;
+  show({
+    field,
+    value,
+  }: {
+    field: keyof WithId<GenericDocument>;
+    value: string | number | boolean;
+  }): Promise<WithId<GenericDocument>>;
   update(
     attributes: WithId<Partial<GenericDocument>>
   ): Promise<WithId<GenericDocument>>;
@@ -50,7 +55,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
 
     await setDoc(reference, data);
 
-    return this.show(id);
+    return this.show({ field: 'id', value: id });
   }
 
   /**
@@ -74,16 +79,22 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
    * @param {string} id - Id of Entity.
    * @return {void}
    * */
-  async show(
-    id: string | WithId<GenericDocument>['id']
-  ): Promise<WithId<GenericDocument>> {
-    const reference = doc(firestore, this._path, id);
+  async show({
+    field,
+    value,
+  }: {
+    field: keyof WithId<GenericDocument>;
+    value: string | number | boolean;
+  }): Promise<WithId<GenericDocument>> {
+    const reference = collection(firestore, this._path);
 
-    const snapshot = await getDoc(reference);
+    const dataQuery = query(reference, where(field as string, '==', value));
 
-    const data = snapshot.data() as GenericDocument;
+    const snapshot = await getDocs(dataQuery);
 
-    return { id, ...data };
+    const doc = snapshot.docs[0];
+
+    return { id: doc.id, ...doc.data() } as WithId<GenericDocument>;
   }
 
   /**
@@ -99,7 +110,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
 
     await updateDoc(reference, { ...data });
 
-    return this.show(attributes.id);
+    return this.show({ field: 'id', value: attributes.id });
   }
 
   /**
