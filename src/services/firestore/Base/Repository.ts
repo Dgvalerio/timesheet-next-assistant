@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { firestore } from '@/config/firebase';
 import { Collection, WithId } from '@/types/firestore';
 import { sorterBy } from '@/utils/sorterBy';
@@ -10,10 +11,13 @@ import {
   updateDoc,
   query,
   where,
+  addDoc,
 } from '@firebase/firestore';
 
 interface IBase<GenericDocument> {
-  create(attributes: WithId<GenericDocument>): Promise<WithId<GenericDocument>>;
+  create(
+    attributes: { id?: string } & GenericDocument
+  ): Promise<WithId<GenericDocument>>;
   list(): Promise<WithId<GenericDocument>[]>;
   show({
     field,
@@ -21,7 +25,7 @@ interface IBase<GenericDocument> {
   }: {
     field: keyof WithId<GenericDocument>;
     value: string | number | boolean;
-  }): Promise<WithId<GenericDocument>>;
+  }): Promise<WithId<GenericDocument> | void>;
   update(
     attributes: WithId<Partial<GenericDocument>>
   ): Promise<WithId<GenericDocument>>;
@@ -48,14 +52,27 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
    * @return {WithId<Object>}
    * */
   async create(
-    attributes: WithId<GenericDocument>
+    attributes: { id?: string } & GenericDocument
   ): Promise<WithId<GenericDocument>> {
     const { id, ...data } = attributes;
-    const reference = doc(firestore, this._path, id);
 
-    await setDoc(reference, data);
+    if (id) {
+      const reference = doc(firestore, this._path, id);
 
-    return this.show({ field: 'id', value: id });
+      await setDoc(reference, data);
+
+      const entity = await this.show({ field: 'id', value: id });
+
+      return entity!;
+    } else {
+      const reference = collection(firestore, this._path);
+
+      await addDoc(reference, data);
+
+      const entity = await this.show({ field: 'id', value: reference.id });
+
+      return entity!;
+    }
   }
 
   /**
@@ -76,7 +93,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
 
   /**
    * Show an Entity
-   * @param {string} id - Id of Entity.
+   * @param {Object} dto - Options of query,
    * @return {void}
    * */
   async show({
@@ -85,7 +102,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
   }: {
     field: keyof WithId<GenericDocument>;
     value: string | number | boolean;
-  }): Promise<WithId<GenericDocument>> {
+  }): Promise<WithId<GenericDocument> | void> {
     const reference = collection(firestore, this._path);
 
     const dataQuery = query(reference, where(field as string, '==', value));
@@ -93,6 +110,8 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
     const snapshot = await getDocs(dataQuery);
 
     const doc = snapshot.docs[0];
+
+    if (!doc) return;
 
     return { id: doc.id, ...doc.data() } as WithId<GenericDocument>;
   }
@@ -110,12 +129,14 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
 
     await updateDoc(reference, { ...data });
 
-    return this.show({ field: 'id', value: attributes.id });
+    const entity = await this.show({ field: 'id', value: id });
+
+    return entity!;
   }
 
   /**
    * Delete an Entity
-   * @param {string} id - Id of Entity.
+   * @param {string} id - id of Entity.
    * @return {void}
    * */
   async delete(id: string | WithId<GenericDocument>['id']): Promise<void> {
