@@ -1,8 +1,7 @@
-import Protocol from 'devtools-protocol';
-
 export type WithId<GenericDocument> = { id: string } & GenericDocument;
 
 export enum Collection {
+  UserPreferences = 'UserPreferences',
   User = 'User',
   UserClient = 'UserClient',
   Client = 'Client',
@@ -11,11 +10,17 @@ export enum Collection {
   Appointment = 'Appointment',
 }
 
+export interface UserPreferencesDocument {
+  userId: string; // [ref: > User.uid]
+  lubyMail: string;
+  lubyPass: string;
+}
+export type UserPreferencesEntity = WithId<UserPreferencesDocument>;
+
 export interface UserDocument {
   name: string;
   email: string;
   photoURL: string;
-  cookies: Protocol.Network.Cookie[];
 }
 export type UserEntity = WithId<UserDocument>;
 
