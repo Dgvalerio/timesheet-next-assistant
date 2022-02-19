@@ -14,6 +14,10 @@
  - [ ] App em flutter com notificações para "apontar hoje", "apontamento aprovado", "acumulo de apontamentos", "horario de almoço", "total de horas alcançado";
  - [ ] Opção de replicar/duplicar apontamento
 
+# Fix
+ - [ ] validar values no signIn e no signUp
+ - [ ] redirecionar pro dashboard se não tiver logado e tentar acessar o signIn ou o signUp
+
 # Organization
 - [ ] Criar um Notion pra colocar as tasks;
 - [ ] testes automatizados!!;
