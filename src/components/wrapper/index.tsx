@@ -8,12 +8,7 @@ import Styles from '@/components/wrapper/style';
 import { Grid } from '@mui/material';
 
 const Wrapper: FC = ({ children }) => {
-  const { uid, name, image, loading, goHome } = useWrapperController();
-
-  if (!uid) {
-    goHome();
-    return <Loading />;
-  }
+  const { name, image, loading } = useWrapperController();
 
   if (loading) return <Loading />;
 

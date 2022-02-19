@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
@@ -5,23 +6,30 @@ import { useRouter } from 'next/router';
 import { routes } from '@/utils/routes';
 
 interface ControllerReturn {
-  uid?: string;
   name?: string;
   image?: string;
   loading: boolean;
-  goHome: () => void;
 }
 
 const useWrapperController = (): ControllerReturn => {
   const {
-    user: { uid, name, photoURL: image },
-    ui: { loading },
+    user: { uid, name, photoURL: image, cookies },
+    ui: { loading: uiLoading },
   } = useSelector((state) => state);
   const router = useRouter();
+  const [loading, setLoading] = useState(uiLoading);
 
-  const goHome = () => void router.push(routes.home());
+  if (!uid) {
+    void router.push(routes.home());
+    setLoading(true);
+  }
 
-  return { uid, name, image, loading, goHome };
+  if (!cookies) {
+    void router.push(routes.timesheetLogin());
+    setLoading(true);
+  }
+
+  return { name, image, loading };
 };
 
 export default useWrapperController;

@@ -2,6 +2,7 @@ export enum Routes {
   Home = `/`,
   SignUp = `/sign-up`,
   Dashboard = `/dashboard`,
+  TimesheetLogin = `/timesheet-login`,
   AppointmentCreate = `/appointment/create`,
 
   WrapperAccountLogin = `/wrapper/Account/Login`,
@@ -12,6 +13,7 @@ export const routes = {
   home: (): Routes => Routes.Home,
   signUp: (): Routes => Routes.SignUp,
   dashboard: (): Routes => Routes.Dashboard,
+  timesheetLogin: (): Routes => Routes.TimesheetLogin,
   appointment: {
     create: (): Routes => Routes.AppointmentCreate,
   },
