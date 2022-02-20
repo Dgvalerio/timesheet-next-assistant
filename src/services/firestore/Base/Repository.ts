@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-explicit-any */
 import { firestore } from '@/config/firebase';
 import { Collection, WithId } from '@/types/firestore';
 import { sorterBy } from '@/utils/sorterBy';
@@ -24,7 +24,7 @@ interface IBase<GenericDocument> {
     value,
   }: {
     field: keyof WithId<GenericDocument>;
-    value: string | number | boolean;
+    value: any;
   }): Promise<WithId<GenericDocument> | void>;
   update(
     attributes: WithId<Partial<GenericDocument>>
@@ -101,7 +101,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
     value,
   }: {
     field: keyof WithId<GenericDocument>;
-    value: string | number | boolean;
+    value: any;
   }): Promise<WithId<GenericDocument> | void> {
     const reference = collection(firestore, this._path);
 
