@@ -1,14 +1,18 @@
 import { UserPreferencesRepository } from '@/services/firestore/UserPreferences/Repository';
 import { UserPreferencesDocument } from '@/types/firestore';
+import { decrypt, encrypt } from '@/utils/crypto';
 
 interface TimesheetLoginDTO {
   user: UserPreferencesDocument['userId'];
   email: UserPreferencesDocument['lubyMail'];
-  password: UserPreferencesDocument['lubyPass'];
+  password: string;
 }
 
 interface IUserPreferences {
   timesheetLogin(timesheetLoginDTO: TimesheetLoginDTO): Promise<void>;
+  getTimesheetLogin(
+    userId: UserPreferencesDocument['userId']
+  ): Promise<TimesheetLoginDTO | void>;
 }
 
 /**
@@ -35,16 +39,36 @@ class UserPreferencesController implements IUserPreferences {
     if (!existentPreferences)
       await this.repository.create({
         userId: dto.user,
-        lubyMail: dto.user,
-        lubyPass: dto.password,
+        lubyMail: dto.email,
+        lubyPass: encrypt(dto.password),
       });
     else
       await this.repository.update({
         id: existentPreferences.id,
         userId: dto.user,
-        lubyMail: dto.user,
-        lubyPass: dto.password,
+        lubyMail: dto.email,
+        lubyPass: encrypt(dto.password),
       });
+  }
+
+  /**
+   * Get data to login on Azure Timesheet
+   * @param {string} userId
+   * @return {TimesheetLoginDTO}
+   * */
+  async getTimesheetLogin(
+    userId: UserPreferencesDocument['userId']
+  ): Promise<TimesheetLoginDTO | void> {
+    const preferences = await this.repository.show({
+      field: 'userId',
+      value: userId,
+    });
+
+    if (!preferences) return;
+
+    const password = decrypt(preferences.lubyPass);
+
+    return { user: preferences.userId, email: preferences.lubyMail, password };
   }
 }
 

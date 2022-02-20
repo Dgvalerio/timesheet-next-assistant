@@ -1,3 +1,5 @@
+import { CryptoHash } from '@/utils/crypto';
+
 export type WithId<GenericDocument> = { id: string } & GenericDocument;
 
 export enum Collection {
@@ -13,7 +15,7 @@ export enum Collection {
 export interface UserPreferencesDocument {
   userId: string; // [ref: > User.uid]
   lubyMail: string;
-  lubyPass: string;
+  lubyPass: CryptoHash;
 }
 export type UserPreferencesEntity = WithId<UserPreferencesDocument>;
 
