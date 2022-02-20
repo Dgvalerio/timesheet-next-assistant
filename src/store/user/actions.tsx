@@ -205,11 +205,10 @@ const signOut =
   async (dispatch: Dispatch<Action>): Promise<void> => {
     await dispatch(enableLoading());
 
-    const auth = await getAuth(app);
-    await auth.signOut();
-
-    toRedirect();
     try {
+      const auth = await getAuth(app);
+
+      await auth.signOut();
       await dispatch(clearUserData());
 
       toRedirect();

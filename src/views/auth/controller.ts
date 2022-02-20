@@ -12,17 +12,22 @@ export interface FormAuthData extends HTMLFormElement {
 }
 
 interface ControllerReturn {
+  goHome: () => void;
   goSignUp: () => void;
   handleGithubSignIn: () => void;
   handleGoogleSignIn: () => void;
   handleSubmit: (event: FormEvent<FormAuthData>) => void;
   loading: boolean;
+  uid?: string;
 }
 
 const useAuthController = (): ControllerReturn => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.ui);
+  const {
+    user: { uid },
+    ui: { loading },
+  } = useSelector((state) => state);
 
   const goHome = () => void router.push(routes.dashboard());
 
@@ -45,11 +50,13 @@ const useAuthController = (): ControllerReturn => {
   };
 
   return {
+    goHome,
     goSignUp,
     handleGithubSignIn,
     handleGoogleSignIn,
     handleSubmit,
     loading,
+    uid,
   };
 };
 

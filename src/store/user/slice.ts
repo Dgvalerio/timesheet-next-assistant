@@ -46,7 +46,11 @@ const userSlice = createSlice<UserStore.State, UserStore.Reducers>({
       state.photoURL = action.payload.photoURL;
     },
     clearUserData(state) {
-      state = initialState;
+      state.uid = undefined;
+      state.name = undefined;
+      state.email = undefined;
+      state.photoURL = undefined;
+      state.cookies = [];
     },
     setCookies(state, action) {
       state.cookies = action.payload.cookies;

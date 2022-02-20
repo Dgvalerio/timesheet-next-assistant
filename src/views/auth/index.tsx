@@ -1,5 +1,8 @@
+import React from 'react';
+
 import type { NextPage } from 'next';
 
+import Loading from '@/components/loading';
 import useAuthController from '@/views/auth/controller';
 import Styles from '@/views/auth/style';
 import {
@@ -13,12 +16,19 @@ import {
 
 const Auth: NextPage = () => {
   const {
+    goHome,
     goSignUp,
     handleGithubSignIn,
     handleGoogleSignIn,
     handleSubmit,
     loading,
+    uid,
   } = useAuthController();
+
+  if (uid) {
+    goHome();
+    return <Loading />;
+  }
 
   return (
     <Styles.Container>
