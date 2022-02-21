@@ -7,7 +7,9 @@ export enum Collection {
   User = 'User',
   UserClient = 'UserClient',
   Client = 'Client',
+  ClientProject = 'ClientProject',
   Project = 'Project',
+  ProjectCategory = 'ProjectCategory',
   Category = 'Category',
   Appointment = 'Appointment',
 }
