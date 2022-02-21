@@ -5,9 +5,10 @@ import { sorterBy } from '@/utils/sorterBy';
 import {
   collection,
   deleteDoc,
-  doc,
+  doc as docRef,
   getDocs,
   setDoc,
+  getDoc,
   updateDoc,
   query,
   where,
@@ -60,7 +61,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
     const { id, ...data } = attributes;
 
     if (id) {
-      const reference = doc(firestore, this._path, id);
+      const reference = docRef(firestore, this._path, id);
 
       await setDoc(reference, data);
 
@@ -91,6 +92,17 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
     let snapshot = await getDocs(reference);
 
     if (listQuery) {
+      if (listQuery.field === 'id') {
+        const reference = docRef(firestore, this._path, listQuery.value);
+        const snapshot = await getDoc(reference);
+
+        if (!snapshot.exists()) return [];
+
+        const doc = await snapshot.data();
+
+        return [{ id: listQuery.value, ...doc } as WithId<GenericDocument>];
+      }
+
       const dataQuery = query(
         reference,
         where(listQuery.field as string, '==', listQuery.value)
@@ -117,6 +129,17 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
   }: ListAndShowQuery<
     WithId<GenericDocument>
   >): Promise<WithId<GenericDocument> | void> {
+    if (field === 'id') {
+      const reference = docRef(firestore, this._path, value);
+      const snapshot = await getDoc(reference);
+
+      if (!snapshot.exists()) return;
+
+      const doc = await snapshot.data();
+
+      return { id: value, ...doc } as WithId<GenericDocument>;
+    }
+
     const reference = collection(firestore, this._path);
 
     const dataQuery = query(reference, where(field as string, '==', value));
@@ -139,7 +162,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
     attributes: WithId<Partial<GenericDocument>>
   ): Promise<WithId<GenericDocument>> {
     const { id, ...data } = attributes;
-    const reference = doc(firestore, this._path, id);
+    const reference = docRef(firestore, this._path, id);
 
     await updateDoc(reference, { ...data });
 
@@ -154,7 +177,7 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
    * @return {void}
    * */
   async delete(id: string | WithId<GenericDocument>['id']): Promise<void> {
-    const reference = doc(firestore, this._path, id);
+    const reference = docRef(firestore, this._path, id);
 
     await deleteDoc(reference);
   }
