@@ -1,6 +1,8 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import { UserClient } from '@/services/firestore/UserClient/Controller';
 import { Client, Project, Category } from '@/types/entities';
 
 interface ControllerReturn {
@@ -28,11 +30,13 @@ interface ControllerReturn {
 }
 
 const useCreateAppointmentController = (): ControllerReturn => {
-  const [clients] = useState<Client[]>([]);
+  const { uid } = useSelector((state) => state.user);
+
+  const [clients, setClients] = useState<Client[]>([]);
   const [client, setClient] = useState<string>('');
-  const [projects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [project, setProject] = useState<string>('');
-  const [categories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [category, setCategory] = useState<string>('');
   const [date, setDate] = useState(
     (() => {
@@ -60,6 +64,61 @@ const useCreateAppointmentController = (): ControllerReturn => {
       setIsLoading(false);
     }
   };
+
+  const loadClients = useCallback(async () => {
+    if (!uid) return;
+    setIsLoading(true);
+
+    try {
+      const response = await UserClient.loadUserClients(uid);
+
+      setClients(response);
+      setClient(response[0].id);
+    } catch (e) {
+      console.error({ e });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [uid]);
+
+  // Load Clients
+  useEffect(() => {
+    if (uid) void loadClients();
+  }, [uid, loadClients]);
+
+  // Load projects of selected client
+  useEffect(() => {
+    if (!client || client === '') return;
+
+    const selectedClient = clients.find(({ id }) => id === client);
+
+    if (!selectedClient) return;
+
+    const projectsOfSelectedClient = selectedClient.projects;
+
+    setProjects(projectsOfSelectedClient);
+    setProject(
+      projectsOfSelectedClient.length > 0 ? projectsOfSelectedClient[0].id : ''
+    );
+  }, [client, clients]);
+
+  // Load categories of selected project
+  useEffect(() => {
+    if (!project || project === '') return;
+
+    const selectedProject = projects.find(({ id }) => id === project);
+
+    if (!selectedProject) return;
+
+    const categoriesOfSelectedProject = selectedProject.categories;
+
+    setCategories(categoriesOfSelectedProject);
+    setCategory(
+      categoriesOfSelectedProject.length > 0
+        ? categoriesOfSelectedProject[0].id
+        : ''
+    );
+  }, [project, projects]);
 
   return {
     clients,

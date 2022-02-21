@@ -5,16 +5,16 @@ export interface Client {
 }
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   startDate: string;
   endDate: string;
   categories: Category[];
-  clientId: number;
+  clientId: string;
 }
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
-  projectId: number;
+  projectId: string;
 }
