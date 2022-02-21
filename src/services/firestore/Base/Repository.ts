@@ -14,18 +14,21 @@ import {
   addDoc,
 } from '@firebase/firestore';
 
+interface ListAndShowQuery<Entity> {
+  field: keyof Entity;
+  value: any;
+}
+
 interface IBase<GenericDocument> {
   create(
     attributes: { id?: string } & GenericDocument
   ): Promise<WithId<GenericDocument>>;
-  list(): Promise<WithId<GenericDocument>[]>;
-  show({
-    field,
-    value,
-  }: {
-    field: keyof WithId<GenericDocument>;
-    value: any;
-  }): Promise<WithId<GenericDocument> | void>;
+  list(
+    listQuery?: ListAndShowQuery<WithId<GenericDocument>>
+  ): Promise<WithId<GenericDocument>[]>;
+  show(
+    showQuery: ListAndShowQuery<WithId<GenericDocument>>
+  ): Promise<WithId<GenericDocument> | void>;
   update(
     attributes: WithId<Partial<GenericDocument>>
   ): Promise<WithId<GenericDocument>>;
@@ -77,12 +80,24 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
 
   /**
    * List Entities
+   * @param {WithId<Object>} listQuery - attributes of query.
    * @return {WithId<Object>[]}
    * */
-  async list(): Promise<WithId<GenericDocument>[]> {
+  async list(
+    listQuery?: ListAndShowQuery<WithId<GenericDocument>>
+  ): Promise<WithId<GenericDocument>[]> {
     const reference = collection(firestore, this._path);
 
-    const snapshot = await getDocs(reference);
+    let snapshot = await getDocs(reference);
+
+    if (listQuery) {
+      const dataQuery = query(
+        reference,
+        where(listQuery.field as string, '==', listQuery.value)
+      );
+
+      snapshot = await getDocs(dataQuery);
+    }
 
     const items = snapshot.docs.map(
       (doc) => ({ id: doc.id, ...doc.data() } as WithId<GenericDocument>)
@@ -99,10 +114,9 @@ export class BaseRepository<GenericDocument> implements IBase<GenericDocument> {
   async show({
     field,
     value,
-  }: {
-    field: keyof WithId<GenericDocument>;
-    value: any;
-  }): Promise<WithId<GenericDocument> | void> {
+  }: ListAndShowQuery<
+    WithId<GenericDocument>
+  >): Promise<WithId<GenericDocument> | void> {
     const reference = collection(firestore, this._path);
 
     const dataQuery = query(reference, where(field as string, '==', value));
