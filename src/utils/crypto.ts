@@ -10,7 +10,6 @@ export interface CryptoHash {
 }
 
 export const encrypt = (text: string): CryptoHash => {
-  console.log({ text, secretKey });
   const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
