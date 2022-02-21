@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 
 import { useRouter } from 'next/router';
 
+import { Client } from '@/services/firestore/Client/Controller';
 import { UserPreferences } from '@/services/firestore/UserPreferences/Controller';
 import { ScrapperApi } from '@/services/scrapperApi';
 import { disableLoading, enableLoading } from '@/store/ui/actions';
@@ -56,6 +57,8 @@ const useTimesheetLoginController = (): ControllerReturn => {
 
       if (keepSave)
         await UserPreferences.timesheetLogin({ user: uid!, email, password });
+
+      await Client.updateClients(uid, cookies);
 
       await router.push(routes.dashboard());
     } catch (e) {
