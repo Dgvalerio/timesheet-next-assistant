@@ -7,18 +7,12 @@ import {
 } from '@/types/firestore';
 
 type ListAndShowQuery =
-  | {
-      field: 'id';
-      value: ClientEntity['id'];
-    }
-  | {
-      field: 'title';
-      value: ClientEntity['title'];
-    };
+  | { field: 'id'; value: ClientEntity['id'] }
+  | { field: 'title'; value: ClientEntity['title'] };
 
 interface IClient {
   create(attributes: ClientEntity): Promise<ClientEntity>;
-  list(query: ListAndShowQuery): Promise<ClientEntity[]>;
+  list(query?: ListAndShowQuery): Promise<ClientEntity[]>;
   show(query: ListAndShowQuery): Promise<ClientEntity | void>;
   update(attributes: WithId<Partial<ClientDocument>>): Promise<ClientEntity>;
   delete(id: ClientEntity['id']): Promise<void>;

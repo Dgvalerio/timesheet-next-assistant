@@ -6,23 +6,14 @@ import {
   WithId,
 } from '@/types/firestore';
 
+type ListAndShowQuery =
+  | { field: 'id'; value: CategoryEntity['id'] }
+  | { field: 'name'; value: CategoryEntity['name'] };
+
 interface ICategory {
   create(attributes: CategoryDocument): Promise<CategoryEntity>;
-  list(): Promise<CategoryEntity[]>;
-
-  show(query: {
-    field: 'id';
-    value: CategoryEntity['id'];
-  }): Promise<CategoryEntity | void>;
-  show(query: {
-    field: 'name';
-    value: CategoryEntity['name'];
-  }): Promise<CategoryEntity | void>;
-  show(query: {
-    field: 'projectId';
-    value: CategoryEntity['projectId'];
-  }): Promise<CategoryEntity | void>;
-
+  list(query?: ListAndShowQuery): Promise<CategoryEntity[]>;
+  show(query: ListAndShowQuery): Promise<CategoryEntity | void>;
   update(
     attributes: WithId<Partial<CategoryDocument>>
   ): Promise<CategoryEntity>;

@@ -41,15 +41,25 @@ export interface ProjectDocument {
   name: string;
   startDate: string;
   endDate: string;
-  clientId: string; // [ref: > Client.id];
 }
 export type ProjectEntity = WithId<ProjectDocument>;
 
+export interface ClientProjectDocument {
+  clientId: string; // [ref: > Client.id]
+  projectId: string; // [ref: > Project.id]
+}
+export type ClientProjectEntity = WithId<ClientProjectDocument>;
+
 export interface CategoryDocument {
   name: string;
-  projectId: string; // [ref: > Project.id];
 }
 export type CategoryEntity = WithId<CategoryDocument>;
+
+export interface ProjectCategoryDocument {
+  projectId: string; // [ref: > Project.id]
+  categoryId: string; // [ref: > Category.id]
+}
+export type ProjectCategoryEntity = WithId<ProjectCategoryDocument>;
 
 export interface AppointmentDocument {
   userUid: string; // [ref: > User.uid]
@@ -70,6 +80,7 @@ export interface ClientWithProjects extends ClientEntity {
 export interface ClientWithProjectsWithCategories extends ClientEntity {
   projects: ProjectWithCategories[];
 }
+
 export interface ProjectWithCategories extends ProjectEntity {
   categories: CategoryEntity[];
 }

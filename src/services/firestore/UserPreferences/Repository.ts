@@ -6,27 +6,16 @@ import {
   WithId,
 } from '@/types/firestore';
 
+type ListAndShowQuery =
+  | { field: 'id'; value: UserPreferencesEntity['id'] }
+  | { field: 'userId'; value: UserPreferencesEntity['userId'] }
+  | { field: 'lubyMail'; value: UserPreferencesEntity['lubyMail'] }
+  | { field: 'lubyPass'; value: UserPreferencesEntity['lubyPass'] };
+
 interface IUserPreferences {
   create(attributes: UserPreferencesDocument): Promise<UserPreferencesEntity>;
-  list(): Promise<UserPreferencesEntity[]>;
-
-  show(query: {
-    field: 'id';
-    value: UserPreferencesEntity['id'];
-  }): Promise<UserPreferencesEntity | void>;
-  show(query: {
-    field: 'userId';
-    value: UserPreferencesEntity['userId'];
-  }): Promise<UserPreferencesEntity | void>;
-  show(query: {
-    field: 'lubyMail';
-    value: UserPreferencesEntity['lubyMail'];
-  }): Promise<UserPreferencesEntity | void>;
-  show(query: {
-    field: 'lubyPass';
-    value: UserPreferencesEntity['lubyPass'];
-  }): Promise<UserPreferencesEntity | void>;
-
+  list(query?: ListAndShowQuery): Promise<UserPreferencesEntity[]>;
+  show(query: ListAndShowQuery): Promise<UserPreferencesEntity | void>;
   update(
     attributes: WithId<Partial<UserPreferencesDocument>>
   ): Promise<UserPreferencesEntity>;

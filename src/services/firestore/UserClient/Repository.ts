@@ -6,23 +6,15 @@ import {
   WithId,
 } from '@/types/firestore';
 
+type ListAndShowQuery =
+  | { field: 'id'; value: UserClientEntity['id'] }
+  | { field: 'userId'; value: UserClientEntity['userId'] }
+  | { field: 'clientId'; value: UserClientEntity['clientId'] };
+
 interface IUserClient {
   create(attributes: UserClientDocument): Promise<UserClientEntity>;
-  list(): Promise<UserClientEntity[]>;
-
-  show(query: {
-    field: 'id';
-    value: UserClientEntity['id'];
-  }): Promise<UserClientEntity | void>;
-  show(query: {
-    field: 'userId';
-    value: UserClientEntity['userId'];
-  }): Promise<UserClientEntity | void>;
-  show(query: {
-    field: 'clientId';
-    value: UserClientEntity['clientId'];
-  }): Promise<UserClientEntity | void>;
-
+  list(query?: ListAndShowQuery): Promise<UserClientEntity[]>;
+  show(query: ListAndShowQuery): Promise<UserClientEntity | void>;
   update(
     attributes: WithId<Partial<UserClientDocument>>
   ): Promise<UserClientEntity>;
