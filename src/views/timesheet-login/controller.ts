@@ -45,6 +45,11 @@ const useTimesheetLoginController = (): ControllerReturn => {
     try {
       const { cookies } = await ScrapperApi.signIn({ login: email, password });
 
+      if (!uid) {
+        toast.error('Not authenticated!');
+        await router.push(routes.home());
+        throw new Error('Not authenticated!');
+      }
       if (!cookies) throw new Error('Cookies not found!');
 
       dispatch(setCookies({ cookies }));
@@ -54,6 +59,7 @@ const useTimesheetLoginController = (): ControllerReturn => {
 
       await router.push(routes.dashboard());
     } catch (e) {
+      toast.error((<Error>e).message);
       console.log(e);
     } finally {
       dispatch(disableLoading());
