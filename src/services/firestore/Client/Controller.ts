@@ -1,6 +1,6 @@
-import { CategoryRepository } from '@/services/firestore/Category/Repository';
+import { Category } from '@/services/firestore/Category/Controller';
 import { ClientRepository } from '@/services/firestore/Client/Repository';
-import { ProjectRepository } from '@/services/firestore/Project/Repository';
+import { Project } from '@/services/firestore/Project/Controller';
 import { UserClientRepository } from '@/services/firestore/UserClient/Repository';
 import { ScrapperApi } from '@/services/scrapperApi';
 
@@ -17,18 +17,17 @@ interface IClient {
  * @controller ClientController
  * */
 class ClientController implements IClient {
+  private categoryController: typeof Category;
   private clientRepository: ClientRepository;
-  private projectRepository: ProjectRepository;
-  private categoryRepository: CategoryRepository;
+  private projectController: typeof Project;
   private userClientRepository: UserClientRepository;
   private scrapper: typeof ScrapperApi;
 
   /** Init repository */
   constructor() {
+    this.categoryController = Category;
     this.clientRepository = new ClientRepository();
-    this.projectRepository = new ProjectRepository();
-    this.categoryRepository = new CategoryRepository();
-
+    this.projectController = Project;
     this.userClientRepository = new UserClientRepository();
 
     this.scrapper = ScrapperApi;
@@ -60,7 +59,7 @@ class ClientController implements IClient {
       });
 
       const addProjectsPromise = client.projects.map(async (project) => {
-        await this.projectRepository.create({
+        await this.projectController.create({
           id: String(project.Id),
           name: project.Name,
           startDate: project.StartDate,
@@ -70,7 +69,7 @@ class ClientController implements IClient {
 
         const addCategoriesPromise = project.categories.map(
           async (category) => {
-            await this.categoryRepository.create({
+            await this.categoryController.create({
               id: String(category.Id),
               name: category.Name,
               projectId: String(project.Id),
