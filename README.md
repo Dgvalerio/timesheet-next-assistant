@@ -12,7 +12,10 @@
  - [ ] apontamento pre ponto (para apontamento em sequencia);
  - [ ] editor personalizado para descrição do apontamento;
  - [ ] App em flutter com notificações para "apontar hoje", "apontamento aprovado", "acumulo de apontamentos", "horario de almoço", "total de horas alcançado";
- - [ ] Opção de replicar/duplicar apontamento
+ - [ ] Opção de replicar/duplicar apontamento;
+ - [ ] A data deve ser baseada não no dia de hoje, mas no último dia apontado (levar em cota, somente dias úteis);
+ - [ ] Rotinas (conversar mais com Renan);
+ - [ ] Possibilitar o uso básico e o uso avançado;
 
 # Fix
  - [ ] validar values no signIn e no signUp
