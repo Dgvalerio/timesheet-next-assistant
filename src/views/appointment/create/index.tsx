@@ -19,27 +19,27 @@ const CreateAppointment: NextPage = () => {
   const {
     clients,
     client,
-    setClient,
+    clientError,
     projects,
     project,
-    setProject,
+    projectError,
     categories,
     category,
-    setCategory,
+    categoryError,
     date,
-    setDate,
+    dateError,
     initialTime,
-    setInitialTime,
+    initialTimeError,
     finalTime,
-    setFinalTime,
+    finalTimeError,
     accounted,
-    setAccounted,
     description,
-    setDescription,
+    descriptionError,
     commit,
-    setCommit,
+    commitError,
     commitVisible,
     handleSubmit,
+    updateField,
   } = useCreateAppointmentController();
 
   return (
@@ -62,10 +62,13 @@ const CreateAppointment: NextPage = () => {
               <TextField
                 select
                 label="Cliente"
+                name="client"
                 value={client}
-                onChange={(event) => setClient(event.target.value)}
-                required
+                onChange={updateField}
                 disabled={clients.length <= 0}
+                error={!!clientError}
+                helperText={clientError}
+                required
                 fullWidth
               >
                 {clients.map(({ id, title }) => (
@@ -79,10 +82,13 @@ const CreateAppointment: NextPage = () => {
               <TextField
                 select
                 label="Projeto"
+                name="project"
                 value={project}
-                onChange={(event) => setProject(event.target.value)}
-                required
+                onChange={updateField}
                 disabled={projects.length <= 0}
+                error={!!projectError}
+                helperText={projectError}
+                required
                 fullWidth
               >
                 {projects.map(({ id, name }) => (
@@ -96,10 +102,13 @@ const CreateAppointment: NextPage = () => {
               <TextField
                 select
                 label="Categoria"
+                name="category"
                 value={category}
-                onChange={(event) => setCategory(event.target.value)}
-                required
+                onChange={updateField}
                 disabled={categories.length <= 0}
+                error={!!categoryError}
+                helperText={categoryError}
+                required
                 fullWidth
               >
                 {categories.map(({ id, name }) => (
@@ -115,8 +124,11 @@ const CreateAppointment: NextPage = () => {
                 label="Data"
                 variant="outlined"
                 type="date"
-                onChange={(event) => setDate(event.target.value)}
+                onChange={updateField}
+                name="date"
                 value={date}
+                error={!!dateError}
+                helperText={dateError}
                 required
                 fullWidth
               />
@@ -126,20 +138,25 @@ const CreateAppointment: NextPage = () => {
                 label="Hora Inicial"
                 variant="outlined"
                 type="time"
-                onChange={(event) => setInitialTime(event.target.value)}
+                onChange={updateField}
+                name="initialTime"
                 value={initialTime}
+                error={!!initialTimeError}
+                helperText={initialTimeError}
                 required
                 fullWidth
               />
             </Grid>
             <Grid item xs={4}>
               <TextField
-                name="finalTime"
                 label="Hora Final"
                 variant="outlined"
                 type="time"
-                onChange={(event) => setFinalTime(event.target.value)}
+                onChange={updateField}
+                name="finalTime"
                 value={finalTime}
+                error={!!finalTimeError}
+                helperText={finalTimeError}
                 required
                 fullWidth
               />
@@ -152,8 +169,10 @@ const CreateAppointment: NextPage = () => {
                   label="Link do commit"
                   variant="outlined"
                   type="url"
-                  onChange={(event) => setCommit(event.target.value)}
+                  onChange={updateField}
                   value={commit}
+                  error={!!commitError}
+                  helperText={commitError}
                   required
                   fullWidth
                 />
@@ -166,8 +185,11 @@ const CreateAppointment: NextPage = () => {
                 variant="outlined"
                 required
                 multiline
-                onChange={(event) => setDescription(event.target.value)}
+                onChange={updateField}
+                name="description"
                 value={description}
+                error={!!descriptionError}
+                helperText={descriptionError}
                 fullWidth
                 rows={4}
               />
@@ -177,8 +199,9 @@ const CreateAppointment: NextPage = () => {
               <FormControlLabel
                 control={
                   <Checkbox
+                    name="accounted"
                     checked={accounted}
-                    onChange={(event) => setAccounted(event.target.checked)}
+                    onChange={updateField}
                   />
                 }
                 label="Não Contabilizado?"
