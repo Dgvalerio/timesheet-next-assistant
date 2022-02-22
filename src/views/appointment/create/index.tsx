@@ -36,6 +36,9 @@ const CreateAppointment: NextPage = () => {
     setAccounted,
     description,
     setDescription,
+    commit,
+    setCommit,
+    commitVisible,
     handleSubmit,
   } = useCreateAppointmentController();
 
@@ -141,6 +144,21 @@ const CreateAppointment: NextPage = () => {
                 fullWidth
               />
             </Grid>
+
+            {commitVisible && (
+              <Grid item xs={12}>
+                <TextField
+                  name="commit"
+                  label="Link do commit"
+                  variant="outlined"
+                  type="url"
+                  onChange={(event) => setCommit(event.target.value)}
+                  value={commit}
+                  required
+                  fullWidth
+                />
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <TextField

@@ -25,6 +25,9 @@ interface ControllerReturn {
   setAccounted: (accounted: boolean) => void;
   description: string;
   setDescription: (description: string) => void;
+  commit: string;
+  setCommit: (commit: string) => void;
+  commitVisible: boolean;
   handleSubmit: (event: FormEvent) => Promise<void>;
   isLoading: boolean;
 }
@@ -48,6 +51,8 @@ const useCreateAppointmentController = (): ControllerReturn => {
   const [finalTime, setFinalTime] = useState<string>('');
   const [accounted, setAccounted] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
+  const [commitVisible, setCommitVisible] = useState<boolean>(false);
+  const [commit, setCommit] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
@@ -120,6 +125,21 @@ const useCreateAppointmentController = (): ControllerReturn => {
     );
   }, [project, projects]);
 
+  // Set visibly of commit input
+  useEffect(() => {
+    if (!category || !categories || categories.length === 0) {
+      setCommitVisible(false);
+    } else {
+      const actualCategory = categories.find(({ id }) => id === category);
+
+      if (actualCategory && actualCategory.name === 'Desenvolvimento') {
+        setCommitVisible(true);
+      } else {
+        setCommitVisible(false);
+      }
+    }
+  }, [categories, category]);
+
   return {
     clients,
     client,
@@ -140,6 +160,9 @@ const useCreateAppointmentController = (): ControllerReturn => {
     setAccounted,
     description,
     setDescription,
+    commit,
+    setCommit,
+    commitVisible,
     handleSubmit,
     isLoading,
   };
