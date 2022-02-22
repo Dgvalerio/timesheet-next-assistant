@@ -73,6 +73,7 @@ export interface AppointmentDocument {
   endTime: string;
   notMonetize: boolean;
   description: string;
+  commit?: string;
 }
 export type AppointmentEntity = WithId<AppointmentDocument>;
 

@@ -120,6 +120,7 @@ namespace Scrapper {
         endTime: string;
         notMonetize: boolean;
         description: string;
+        commit?: string;
       }
 
       export type Response =
