@@ -16,7 +16,7 @@ const Wrapper: FC = ({ children }) => {
     return <Loading />;
   }
 
-  if (!cookies || cookies.length === 0) {
+  if (!loading && (!cookies || cookies.length === 0)) {
     loadUserPreferences();
     return <Loading />;
   }

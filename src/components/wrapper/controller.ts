@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { useRouter } from 'next/router';
 
 import { UserPreferences } from '@/services/firestore/UserPreferences/Controller';
 import { ScrapperApi } from '@/services/scrapperApi';
+import { disableLoading, enableLoading } from '@/store/ui/actions';
 import { setCookies } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
@@ -33,20 +35,28 @@ const useWrapperController = (): ControllerReturn => {
 
   const loadUserPreferences = async () => {
     if (!uid) return;
+    dispatch(enableLoading());
     const userPreferences = await UserPreferences.getTimesheetLogin(uid);
 
     if (userPreferences) {
-      const { cookies } = await ScrapperApi.signIn({
-        login: userPreferences.email,
-        password: userPreferences.password,
-      });
+      try {
+        const { cookies } = await ScrapperApi.signIn({
+          login: userPreferences.email,
+          password: userPreferences.password,
+        });
 
-      if (!cookies) throw new Error('Cookies not found!');
+        if (!cookies) throw new Error('Cookies not found!');
 
-      dispatch(setCookies({ cookies }));
+        dispatch(setCookies({ cookies }));
+      } catch (e) {
+        toast.error(JSON.stringify(e));
+        goTimesheetLogin();
+      }
     } else {
       goTimesheetLogin();
     }
+
+    dispatch(disableLoading());
   };
 
   return { uid, cookies, name, image, loading, goHome, loadUserPreferences };
