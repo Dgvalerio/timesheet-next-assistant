@@ -91,13 +91,29 @@ const useCreateAppointmentController = (): ControllerReturn => {
     if (uid) void loadClients();
   }, [uid, loadClients]);
 
+  const resetProject = () => {
+    setProjects([]);
+    setProject('');
+  };
+
+  const resetCategory = () => {
+    setCategories([]);
+    setCategory('');
+  };
+
   // Load projects of selected client
   useEffect(() => {
-    if (!client || client === '') return;
+    if (!client || client === '') {
+      resetProject();
+      return;
+    }
 
     const selectedClient = clients.find(({ id }) => id === client);
 
-    if (!selectedClient) return;
+    if (!selectedClient) {
+      resetProject();
+      return;
+    }
 
     const projectsOfSelectedClient = selectedClient.projects;
 
@@ -109,11 +125,17 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
   // Load categories of selected project
   useEffect(() => {
-    if (!project || project === '') return;
+    if (!project || project === '') {
+      resetCategory();
+      return;
+    }
 
     const selectedProject = projects.find(({ id }) => id === project);
 
-    if (!selectedProject) return;
+    if (!selectedProject) {
+      resetCategory();
+      return;
+    }
 
     const categoriesOfSelectedProject = selectedProject.categories;
 
