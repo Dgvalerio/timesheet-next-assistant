@@ -5,7 +5,7 @@ import { transparentize } from 'polished';
 import styled from 'styled-components';
 
 const Container = styled(Grid)`
-  z-index: 9999;
+  z-index: 1299;
   box-shadow: 0 0 2px
     ${({ theme }) =>
       theme.palette.mode === UIStore.ThemeMode.Light
