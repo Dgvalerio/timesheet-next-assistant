@@ -86,11 +86,6 @@ const useCreateAppointmentController = (): ControllerReturn => {
     }
   }, [uid]);
 
-  // Load Clients
-  useEffect(() => {
-    if (uid) void loadClients();
-  }, [uid, loadClients]);
-
   const resetProject = () => {
     setProjects([]);
     setProject('');
@@ -100,6 +95,11 @@ const useCreateAppointmentController = (): ControllerReturn => {
     setCategories([]);
     setCategory('');
   };
+
+  // Load Clients
+  useEffect(() => {
+    if (uid) void loadClients();
+  }, [uid, loadClients]);
 
   // Load projects of selected client
   useEffect(() => {
