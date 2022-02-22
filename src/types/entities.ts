@@ -1,20 +1,11 @@
-export interface Client {
-  id: string;
-  title: string;
-  projects: Project[];
-}
+import {
+  CategoryEntity,
+  ClientWithProjectsWithCategories,
+  ProjectWithCategories,
+} from '@/types/firestore';
 
-export interface Project {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  categories: Category[];
-  clientId: string;
-}
+export type Client = ClientWithProjectsWithCategories;
 
-export interface Category {
-  id: string;
-  name: string;
-  projectId: string;
-}
+export type Project = ProjectWithCategories;
+
+export type Category = CategoryEntity;
