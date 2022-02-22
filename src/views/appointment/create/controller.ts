@@ -12,6 +12,7 @@ import { UserClient } from '@/services/firestore/UserClient/Controller';
 import { ScrapperApi } from '@/services/scrapperApi';
 import { Client, Project, Category } from '@/types/entities';
 
+import { AxiosError } from 'axios';
 import { compareAsc } from 'date-fns';
 
 interface ControllerReturn {
@@ -286,9 +287,11 @@ const useCreateAppointmentController = (): ControllerReturn => {
     if (!validateField[InputName.Description](description)) return;
     if (!validateField[InputName.Commit](commit)) return;
 
-    try {
-      const [year, month, day] = date.split('-');
+    // Estudando e aprimorando conhecimentos em Typescript, NextJS, ReactJS, MaterialUI, Express, NodeJS, Firebase e Puppeteer.
 
+    const [year, month, day] = date.split('-');
+
+    try {
       await ScrapperApi.createAppointment({
         cookies,
         customer: client,
@@ -304,11 +307,10 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
       toast.success('Sucesso!');
     } catch (e) {
-      console.error({ e: JSON.stringify(e) });
-      toast.error((<Error>e).message || 'Falha!');
-    } finally {
-      setIsLoading(false);
+      toast.error((<AxiosError>e).response?.data.error || 'Falha!');
     }
+
+    setIsLoading(false);
   };
 
   const loadClients = useCallback(async () => {
