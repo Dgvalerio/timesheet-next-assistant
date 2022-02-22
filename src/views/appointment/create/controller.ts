@@ -32,6 +32,14 @@ interface ControllerReturn {
   isLoading: boolean;
 }
 
+const numberToTime = (time: number) => {
+  let aux = String(time);
+  aux = aux.padStart(4, '0');
+  aux = `${aux.slice(0, 2)}:${aux.slice(2)}`;
+
+  return aux;
+};
+
 const useCreateAppointmentController = (): ControllerReturn => {
   const { uid } = useSelector((state) => state.user);
 
@@ -98,7 +106,11 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
   // Load Clients
   useEffect(() => {
-    if (uid) void loadClients();
+    if (!uid) return;
+
+    void loadClients();
+
+    setInitialTime('00:00');
   }, [uid, loadClients]);
 
   // Load projects of selected client
@@ -161,6 +173,16 @@ const useCreateAppointmentController = (): ControllerReturn => {
       }
     }
   }, [categories, category]);
+
+  useEffect(() => {
+    const start = Number(initialTime.replace(':', ''));
+    const end = Number(finalTime.replace(':', ''));
+
+    if (start >= end) {
+      toast.warn('O horário final deve ser maior que o inicial!');
+      setFinalTime(numberToTime(start + 1));
+    }
+  }, [finalTime, initialTime]);
 
   return {
     clients,
