@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { UserClient } from '@/services/firestore/UserClient/Controller';
+import { ScrapperApi } from '@/services/scrapperApi';
 import { Client, Project, Category } from '@/types/entities';
-import { numberToTime } from '@/utils/numberToTime';
 
 import { compareAsc } from 'date-fns';
 
@@ -54,7 +54,7 @@ export enum InputName {
 }
 
 const useCreateAppointmentController = (): ControllerReturn => {
-  const { uid } = useSelector((state) => state.user);
+  const { uid, cookies } = useSelector((state) => state.user);
 
   const [clients, setClients] = useState<Client[]>([]);
   const [client, setClient] = useState<string>('');
@@ -170,11 +170,14 @@ const useCreateAppointmentController = (): ControllerReturn => {
       const end = Number(finalTime.replace(':', ''));
 
       if (start >= end) {
-        setInitialTimeError('O horário final deve ser maior que o inicial!');
+        const msg = 'O horário final deve ser maior que o inicial!';
+        setInitialTimeError(msg);
+        setFinalTimeError(msg);
         return false;
       }
 
       setInitialTimeError(null);
+      setFinalTimeError(null);
       return true;
     },
     [InputName.FinalTime]: (value: string) => {
@@ -197,10 +200,13 @@ const useCreateAppointmentController = (): ControllerReturn => {
       const end = Number(value.replace(':', ''));
 
       if (start >= end) {
-        setFinalTimeError('O horário final deve ser maior que o inicial!');
+        const msg = 'O horário final deve ser maior que o inicial!';
+        setInitialTimeError(msg);
+        setFinalTimeError(msg);
         return false;
       }
 
+      setInitialTimeError(null);
       setFinalTimeError(null);
       return true;
     },
@@ -245,12 +251,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
         break;
       case InputName.InitialTime:
         setInitialTime(value);
-
-        if (!validateField[name](value)) {
-          const start = Number(value.replace(':', ''));
-          setFinalTime(numberToTime(start + 1));
-        }
-
+        validateField[name](value);
         break;
       case InputName.FinalTime:
         setFinalTime(value);
@@ -286,11 +287,25 @@ const useCreateAppointmentController = (): ControllerReturn => {
     if (!validateField[InputName.Commit](commit)) return;
 
     try {
-      console.log({ event });
+      const [year, month, day] = date.split('-');
+
+      await ScrapperApi.createAppointment({
+        cookies,
+        customer: client,
+        project,
+        category,
+        startTime: initialTime.replace(':', ''),
+        endTime: finalTime.replace(':', ''),
+        informedDate: `${day}${month}${year}`,
+        commit: commitVisible ? commit : undefined,
+        description,
+        notMonetize: accounted,
+      });
+
       toast.success('Sucesso!');
     } catch (e) {
-      console.error({ e });
-      toast.error('Falha!');
+      console.error({ e: JSON.stringify(e) });
+      toast.error((<Error>e).message || 'Falha!');
     } finally {
       setIsLoading(false);
     }

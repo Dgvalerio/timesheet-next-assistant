@@ -13,6 +13,8 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
+  CircularProgress,
+  Backdrop,
 } from '@mui/material';
 
 const CreateAppointment: NextPage = () => {
@@ -40,6 +42,7 @@ const CreateAppointment: NextPage = () => {
     commitVisible,
     handleSubmit,
     updateField,
+    isLoading,
   } = useCreateAppointmentController();
 
   return (
@@ -208,13 +211,16 @@ const CreateAppointment: NextPage = () => {
               />
             </Grid>
             <Grid item>
-              <Button variant="outlined" type="submit">
+              <Button variant="outlined" type="submit" disabled={isLoading}>
                 Adicionar
               </Button>
             </Grid>
           </Grid>
         </Grid>
       </Styles.Container>
+      <Backdrop open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Wrapper>
   );
 };
