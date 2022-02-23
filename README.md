@@ -20,6 +20,8 @@
 # Fix
  - [ ] validar values no signIn e no signUp
  - [ ] redirecionar pro dashboard se não tiver logado e tentar acessar o signIn ou o signUp
+ - [ ] no create-appointment não deixar nada pre-marcado
+ - [ ] dar a opção de apontar outro ou visualizar os apontados
 
 # Organization
 - [ ] Criar um Notion pra colocar as tasks;
