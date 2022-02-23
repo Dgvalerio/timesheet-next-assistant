@@ -5,11 +5,12 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { UserClient } from '@/services/firestore/UserClient/Controller';
 import { ScrapperApi } from '@/services/scrapperApi';
+import { setCookies } from '@/store/user/actions';
 import { Client, Project, Category } from '@/types/entities';
 
 import { AxiosError } from 'axios';
@@ -55,6 +56,7 @@ export enum InputName {
 }
 
 const useCreateAppointmentController = (): ControllerReturn => {
+  const dispatch = useDispatch();
   const { uid, cookies } = useSelector((state) => state.user);
 
   const [clients, setClients] = useState<Client[]>([]);
@@ -308,6 +310,10 @@ const useCreateAppointmentController = (): ControllerReturn => {
       toast.success('Sucesso!');
     } catch (e) {
       toast.error((<AxiosError>e).response?.data.error || 'Falha!');
+
+      if ((<AxiosError>e).response?.status === 401) {
+        dispatch(setCookies({ cookies: [] }));
+      }
     }
 
     setIsLoading(false);
