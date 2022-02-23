@@ -39,6 +39,7 @@ const useWrapperController = (): ControllerReturn => {
     const userPreferences = await UserPreferences.getTimesheetLogin(uid);
 
     if (userPreferences) {
+      toast.info('Realizando login automático...');
       try {
         const { cookies } = await ScrapperApi.signIn({
           login: userPreferences.email,
