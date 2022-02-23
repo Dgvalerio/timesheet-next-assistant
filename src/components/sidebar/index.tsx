@@ -54,7 +54,11 @@ const SideBar: FC = () => (
         text="Incluir"
         route={routes.appointment.create()}
       />
-      <Item icon={<ViewListIcon />} text="Visualizar" />
+      <Item
+        icon={<ViewListIcon />}
+        text="Visualizar"
+        route={routes.appointment.read()}
+      />
     </List>
     <List subheader={<ListSubheader>Relatórios</ListSubheader>}>
       <Item icon={<DescriptionIcon />} text="Notas Fiscais" />

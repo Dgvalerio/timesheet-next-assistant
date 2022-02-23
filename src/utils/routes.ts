@@ -4,6 +4,7 @@ export enum Routes {
   Dashboard = `/dashboard`,
   TimesheetLogin = `/timesheet-login`,
   AppointmentCreate = `/appointment/create`,
+  AppointmentsRead = `/appointment/read`,
 
   WrapperAccountLogin = `/wrapper/Account/Login`,
   WrapperWorksheetRead = `/wrapper/Worksheet/Read`,
@@ -15,6 +16,7 @@ export const routes = {
   dashboard: (): Routes => Routes.Dashboard,
   timesheetLogin: (): Routes => Routes.TimesheetLogin,
   appointment: {
+    read: (): Routes => Routes.AppointmentsRead,
     create: (): Routes => Routes.AppointmentCreate,
   },
   wrapper: {
