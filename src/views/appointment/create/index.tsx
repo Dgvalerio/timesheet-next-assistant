@@ -171,7 +171,7 @@ const CreateAppointment: NextPage = () => {
                   name="commit"
                   label="Link do commit"
                   variant="outlined"
-                  type="url"
+                  type="text"
                   onChange={updateField}
                   value={commit}
                   error={!!commitError}
