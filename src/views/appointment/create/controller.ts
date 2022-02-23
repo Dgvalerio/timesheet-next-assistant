@@ -280,16 +280,20 @@ const useCreateAppointmentController = (): ControllerReturn => {
     event.preventDefault();
     setIsLoading(true);
 
-    if (!validateField[InputName.Client](client)) return;
-    if (!validateField[InputName.Project](project)) return;
-    if (!validateField[InputName.Category](category)) return;
-    if (!validateField[InputName.Date](date)) return;
-    if (!validateField[InputName.InitialTime](initialTime)) return;
-    if (!validateField[InputName.FinalTime](finalTime)) return;
-    if (!validateField[InputName.Description](description)) return;
-    if (!validateField[InputName.Commit](commit)) return;
-
-    // Estudando e aprimorando conhecimentos em Typescript, NextJS, ReactJS, MaterialUI, Express, NodeJS, Firebase e Puppeteer.
+    if (
+      !validateField[InputName.Client](client) ||
+      !validateField[InputName.Project](project) ||
+      !validateField[InputName.Category](category) ||
+      !validateField[InputName.Date](date) ||
+      !validateField[InputName.InitialTime](initialTime) ||
+      !validateField[InputName.FinalTime](finalTime) ||
+      !validateField[InputName.Description](description) ||
+      !validateField[InputName.Commit](commit)
+    ) {
+      toast.warn('Verifique os campos do formulário!');
+      setIsLoading(false);
+      return;
+    }
 
     const [year, month, day] = date.split('-');
 
