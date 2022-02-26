@@ -20,6 +20,81 @@ namespace Scrapper {
   }
 
   export namespace Read {
+    export namespace Appointment {
+      export interface Request {
+        cookies: Protocol.Network.Cookie[];
+        appointmentId: string;
+      }
+
+      export interface Appointment {
+        Worksheet: null;
+        Require: null;
+        Evaluate: null;
+        TotalRows: number;
+        PageSize: number;
+        Table: null;
+        Id: number;
+        IdRequire: null;
+        IdCustomer: number;
+        CustomerName: null;
+        IdProject: number;
+        ProjectName: null;
+        StartDate: null;
+        EndDate: null;
+        IdCell: number;
+        CellName: null;
+        IdCategory: number;
+        IdManager: number;
+        IdDeveloper: number;
+        IsMaster: boolean;
+        IdAncestor: number;
+        DeveloperName: null;
+        HourValue: null;
+        ExtraValue: null;
+        CategoryName: null;
+        InformedDate: string;
+        Created: null;
+        StartTime: string;
+        EndTime: string;
+        TotalTime: null;
+        NotMonetize: boolean;
+        Description: string;
+        CommitRepository: string | null;
+        IsDeleted: boolean;
+        TotalTimeInProject: null;
+        ConsumedTimeInProject: null;
+        IdEvaluate: null;
+        IsApprove: null;
+        IsReprove: null;
+        IsReview: null;
+        IsWait: null;
+        IsPreApproved: null;
+        TimePreApproved: null;
+        UserPreApproved: null;
+        IsPaid: boolean;
+        ConsumedTimeInProjectExceded: boolean;
+        TimeInWorksheetExceded: number;
+        IsEvaluate: boolean;
+        TypeReport: null;
+        SumTotalTime: null;
+        TotaltimeInMinutes: number;
+        IdCustomerPreSelected: null;
+        IdProjectPreSelected: null;
+        IdDeveloperPreSelected: null;
+        IsEvaluatePreSelected: boolean;
+      }
+
+      export type Response =
+        | {
+            appointment: Appointment;
+            error?: never;
+          }
+        | {
+            appointment?: never;
+            error: string;
+          };
+    }
+
     export namespace Appointments {
       export interface Request {
         cookies: Protocol.Network.Cookie[];
@@ -33,9 +108,10 @@ namespace Scrapper {
         data: string;
         horaInicial: string;
         horaFinal: string;
-        total: string;
+        descricao: string;
         naoContabilizado: boolean;
         avaliacao: string;
+        commit: string;
       }
 
       export type Response =
@@ -141,6 +217,9 @@ namespace Scrapper {
     readAppointments(
       readAppointmentsDto: Read.Appointments.Request
     ): Promise<Read.Appointments.Response>;
+    readAppointment(
+      readAppointmentDto: Read.Appointment.Request
+    ): Promise<Read.Appointment.Response>;
     readClients(
       readClientsDto: Read.Clients.Request
     ): Promise<Read.Clients.Response>;
@@ -198,6 +277,22 @@ class ScrapperController implements Scrapper.Interface {
     const { data } = await this.api.post(
       '/scrapper/read-appointments',
       readAppointmentsDto
+    );
+
+    return data;
+  }
+
+  /**
+   * readAppointment
+   * @param {Scrapper.Read.Appointment.Request} readAppointmentDto
+   * @return {Scrapper.Read.Appointment.Response}
+   * */
+  async readAppointment(
+    readAppointmentDto: Scrapper.Read.Appointment.Request
+  ): Promise<Scrapper.Read.Appointment.Response> {
+    const { data } = await this.api.post(
+      '/scrapper/read-appointment',
+      readAppointmentDto
     );
 
     return data;
