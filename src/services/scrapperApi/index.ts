@@ -1,7 +1,7 @@
 import axios, { Axios } from 'axios';
 import Protocol from 'devtools-protocol';
 
-namespace Scrapper {
+export namespace Scrapper {
   export namespace SignIn {
     export interface Request {
       login: string;
