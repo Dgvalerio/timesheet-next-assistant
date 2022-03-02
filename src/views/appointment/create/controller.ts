@@ -39,7 +39,7 @@ interface ControllerReturn {
   commitError: string | null;
   commitVisible: boolean;
   handleSubmit: (event: FormEvent) => Promise<void>;
-  isLoading: boolean;
+  onLoading: CreateAppointmentLoad[];
   updateField: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -53,6 +53,11 @@ export enum InputName {
   Accounted = 'accounted',
   Description = 'description',
   Commit = 'commit',
+}
+
+export enum CreateAppointmentLoad {
+  Submit = 'submit',
+  Clients = 'clients',
 }
 
 const useCreateAppointmentController = (): ControllerReturn => {
@@ -96,7 +101,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
   const [commit, setCommit] = useState<string>('');
   const [commitError, setCommitError] = useState<string | null>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [onLoading, setOnLoading] = useState<CreateAppointmentLoad[]>([]);
 
   const validateField: {
     [key in InputName]: (value: string) => boolean;
@@ -299,7 +304,11 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setIsLoading(true);
+    setOnLoading((prev) =>
+      prev.includes(CreateAppointmentLoad.Submit)
+        ? prev
+        : prev.concat(CreateAppointmentLoad.Submit)
+    );
 
     if (
       !validateField[InputName.Client](client) ||
@@ -312,7 +321,9 @@ const useCreateAppointmentController = (): ControllerReturn => {
       !validateField[InputName.Commit](commit)
     ) {
       toast.warn('Verifique os campos do formulário!');
-      setIsLoading(false);
+      setOnLoading((prev) =>
+        prev.filter((item) => item !== CreateAppointmentLoad.Submit)
+      );
 
       return;
     }
@@ -342,12 +353,18 @@ const useCreateAppointmentController = (): ControllerReturn => {
       }
     }
 
-    setIsLoading(false);
+    setOnLoading((prev) =>
+      prev.filter((item) => item !== CreateAppointmentLoad.Submit)
+    );
   };
 
   const loadClients = useCallback(async () => {
     if (!uid) return;
-    setIsLoading(true);
+    setOnLoading((prev) =>
+      prev.includes(CreateAppointmentLoad.Clients)
+        ? prev
+        : prev.concat(CreateAppointmentLoad.Clients)
+    );
 
     try {
       const response = await UserClient.loadUserClients(uid);
@@ -357,7 +374,9 @@ const useCreateAppointmentController = (): ControllerReturn => {
     } catch (e) {
       console.error({ e });
     } finally {
-      setIsLoading(false);
+      setOnLoading((prev) =>
+        prev.filter((item) => item !== CreateAppointmentLoad.Clients)
+      );
     }
   }, [uid]);
 
@@ -466,7 +485,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
     commitError,
     commitVisible,
     handleSubmit,
-    isLoading,
+    onLoading,
     updateField,
   };
 };

@@ -3,18 +3,21 @@ import React from 'react';
 import { NextPage } from 'next';
 
 import Wrapper from '@/components/wrapper';
-import useCreateAppointmentController from '@/views/appointment/create/controller';
+import useCreateAppointmentController, {
+  CreateAppointmentLoad,
+} from '@/views/appointment/create/controller';
 import Styles from '@/views/appointment/create/style';
 import {
-  Grid,
-  Typography,
-  MenuItem,
-  TextField,
+  Backdrop,
   Button,
-  FormControlLabel,
   Checkbox,
   CircularProgress,
-  Backdrop,
+  FormControlLabel,
+  Grid,
+  MenuItem,
+  Skeleton,
+  TextField,
+  Typography,
 } from '@mui/material';
 
 const CreateAppointment: NextPage = () => {
@@ -42,7 +45,7 @@ const CreateAppointment: NextPage = () => {
     commitVisible,
     handleSubmit,
     updateField,
-    isLoading,
+    onLoading,
   } = useCreateAppointmentController();
 
   return (
@@ -61,66 +64,94 @@ const CreateAppointment: NextPage = () => {
             onSubmit={handleSubmit}
             justifyContent="space-between"
           >
-            <Grid item xs={4}>
-              <TextField
-                select
-                label="Cliente"
-                name="client"
-                value={client}
-                onChange={updateField}
-                disabled={clients.length <= 0}
-                error={!!clientError}
-                helperText={clientError}
-                required
-                fullWidth
-              >
-                {clients.map(({ id, title }) => (
-                  <MenuItem key={id} value={id}>
-                    {title}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                select
-                label="Projeto"
-                name="project"
-                value={project}
-                onChange={updateField}
-                disabled={projects.length <= 0}
-                error={!!projectError}
-                helperText={projectError}
-                required
-                fullWidth
-              >
-                {projects.map(({ id, name }) => (
-                  <MenuItem key={id} value={id}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                select
-                label="Categoria"
-                name="category"
-                value={category}
-                onChange={updateField}
-                disabled={categories.length <= 0}
-                error={!!categoryError}
-                helperText={categoryError}
-                required
-                fullWidth
-              >
-                {categories.map(({ id, name }) => (
-                  <MenuItem key={id} value={id}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+            {onLoading.includes(CreateAppointmentLoad.Clients) ? (
+              <>
+                <Grid item xs={4}>
+                  <Skeleton
+                    width="100%"
+                    height={56}
+                    sx={{ transform: 'none' }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <Skeleton
+                    width="100%"
+                    height={56}
+                    sx={{ transform: 'none' }}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <Skeleton
+                    width="100%"
+                    height={56}
+                    sx={{ transform: 'none' }}
+                  />
+                </Grid>
+              </>
+            ) : (
+              <>
+                <Grid item xs={4}>
+                  <TextField
+                    select
+                    label="Cliente"
+                    name="client"
+                    value={client}
+                    onChange={updateField}
+                    disabled={clients.length <= 0}
+                    error={!!clientError}
+                    helperText={clientError}
+                    required
+                    fullWidth
+                  >
+                    {clients.map(({ id, title }) => (
+                      <MenuItem key={id} value={id}>
+                        {title}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    select
+                    label="Projeto"
+                    name="project"
+                    value={project}
+                    onChange={updateField}
+                    disabled={projects.length <= 0}
+                    error={!!projectError}
+                    helperText={projectError}
+                    required
+                    fullWidth
+                  >
+                    {projects.map(({ id, name }) => (
+                      <MenuItem key={id} value={id}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    select
+                    label="Categoria"
+                    name="category"
+                    value={category}
+                    onChange={updateField}
+                    disabled={categories.length <= 0}
+                    error={!!categoryError}
+                    helperText={categoryError}
+                    required
+                    fullWidth
+                  >
+                    {categories.map(({ id, name }) => (
+                      <MenuItem key={id} value={id}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+              </>
+            )}
 
             <Grid item xs={4}>
               <TextField
@@ -211,14 +242,18 @@ const CreateAppointment: NextPage = () => {
               />
             </Grid>
             <Grid item>
-              <Button variant="outlined" type="submit" disabled={isLoading}>
+              <Button
+                variant="outlined"
+                type="submit"
+                disabled={onLoading.includes(CreateAppointmentLoad.Submit)}
+              >
                 Adicionar
               </Button>
             </Grid>
           </Grid>
         </Grid>
       </Styles.Container>
-      <Backdrop open={isLoading}>
+      <Backdrop open={onLoading.includes(CreateAppointmentLoad.Submit)}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Wrapper>
