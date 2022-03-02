@@ -74,6 +74,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
   const [date, setDate] = useState(
     (() => {
       const date = new Date();
+
       return date.toISOString().split('T')[0];
     })()
   );
@@ -103,28 +104,34 @@ const useCreateAppointmentController = (): ControllerReturn => {
     [InputName.Client]: (value: string) => {
       if (!value || value === '' || value === '-1') {
         setClientError('Um cliente deve ser selecionado!');
+
         return false;
       }
 
       setClientError(null);
+
       return true;
     },
     [InputName.Project]: (value: string) => {
       if (!value || value === '' || value === '-1') {
         setProjectError('Um projeto deve ser selecionado!');
+
         return false;
       }
 
       setProjectError(null);
+
       return true;
     },
     [InputName.Category]: (value: string) => {
       if (!value || value === '' || value === '-1') {
         setCategoryError('Uma categoria deve ser selecionada!');
+
         return false;
       }
 
       setCategoryError(null);
+
       return true;
     },
     [InputName.Date]: (value: string) => {
@@ -145,10 +152,12 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
       if (isFuture > 0) {
         setDateError('O dia escolhido não pode ser maior que o atual!');
+
         return false;
       }
 
       setDateError(null);
+
       return true;
     },
     [InputName.InitialTime]: (value: string) => {
@@ -166,6 +175,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
         setInitialTimeError(
           'O horário inicial não pode ser maior que o atual!'
         );
+
         return false;
       }
 
@@ -174,13 +184,16 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
       if (start >= end) {
         const msg = 'O horário final deve ser maior que o inicial!';
+
         setInitialTimeError(msg);
         setFinalTimeError(msg);
+
         return false;
       }
 
       setInitialTimeError(null);
       setFinalTimeError(null);
+
       return true;
     },
     [InputName.FinalTime]: (value: string) => {
@@ -196,6 +209,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
       if (isFuture > 0) {
         setFinalTimeError('O horário final não pode ser maior que o atual!');
+
         return false;
       }
 
@@ -204,30 +218,37 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
       if (start >= end) {
         const msg = 'O horário final deve ser maior que o inicial!';
+
         setInitialTimeError(msg);
         setFinalTimeError(msg);
+
         return false;
       }
 
       setInitialTimeError(null);
       setFinalTimeError(null);
+
       return true;
     },
     [InputName.Accounted]: () => true,
     [InputName.Description]: (value: string) => {
       if (!value || value === '') {
         setDescriptionError('Uma descrição deve ser informada!');
+
         return false;
       }
       setDescriptionError(null);
+
       return true;
     },
     [InputName.Commit]: (value: string) => {
       if (commitVisible && (!value || value === '')) {
         setCommitError('Um link de commit deve ser informado!');
+
         return false;
       }
       setCommitError(null);
+
       return true;
     },
   };
@@ -292,6 +313,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
     ) {
       toast.warn('Verifique os campos do formulário!');
       setIsLoading(false);
+
       return;
     }
 
@@ -360,6 +382,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
   useEffect(() => {
     if (!client || client === '') {
       resetProject();
+
       return;
     }
 
@@ -367,6 +390,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
     if (!selectedClient) {
       resetProject();
+
       return;
     }
 
@@ -382,6 +406,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
   useEffect(() => {
     if (!project || project === '') {
       resetCategory();
+
       return;
     }
 
@@ -389,6 +414,7 @@ const useCreateAppointmentController = (): ControllerReturn => {
 
     if (!selectedProject) {
       resetCategory();
+
       return;
     }
 

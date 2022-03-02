@@ -1,8 +1,11 @@
 import { FC, ReactElement } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
 import Styles from '@/components/sidebar/style';
+import { enableLoading } from '@/store/ui/actions';
+import { Load } from '@/store/ui/slice';
 import { Routes, routes } from '@/utils/routes';
 import {
   MoreTime as AddIcon,
@@ -27,9 +30,14 @@ const Item: FC<{
   icon: ReactElement;
   route?: Routes;
 }> = ({ text, icon, route }) => {
+  const dispatch = useDispatch();
   const router = useRouter();
 
-  const navigate = () => router.push(route || routes.home());
+  const navigate = () => {
+    if (router.pathname !== route)
+      dispatch(enableLoading({ toLoad: Load.Page }));
+    void router.push(route || routes.home());
+  };
 
   const selected = (): boolean => router.pathname === route;
 

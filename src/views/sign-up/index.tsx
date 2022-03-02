@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 
+import { Load } from '@/store/ui/slice';
 import Styles from '@/views/auth/style';
 import useSignUpController from '@/views/sign-up/controller';
 import {
@@ -88,7 +89,7 @@ const SignUp: NextPage = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Backdrop open={loading}>
+      <Backdrop open={loading.includes(Load.SignUp)}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Styles.Container>

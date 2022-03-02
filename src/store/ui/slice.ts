@@ -1,5 +1,17 @@
-import { createSlice, SliceCaseReducers } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  PayloadAction,
+  SliceCaseReducers,
+} from '@reduxjs/toolkit';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+
+export enum Load {
+  Page = 'page',
+  AzureLogin = 'azure_login',
+  SignIn = 'sign_in',
+  SignUp = 'sign_up',
+  SignOut = 'sign_out',
+}
 
 export namespace UIStore {
   export enum ThemeMode {
@@ -8,19 +20,19 @@ export namespace UIStore {
   }
 
   export interface State {
-    loading: boolean;
+    loading: Load[];
     themeMode: ThemeMode;
   }
 
   export interface Reducers extends SliceCaseReducers<State> {
-    enableLoading: CaseReducer<State>;
-    disableLoading: CaseReducer<State>;
+    enableLoading: CaseReducer<State, PayloadAction<{ toLoad: Load }>>;
+    disableLoading: CaseReducer<State, PayloadAction<{ toLoad: Load }>>;
     switchThemeMode: CaseReducer<State>;
   }
 }
 
 const initialState: UIStore.State = {
-  loading: false,
+  loading: [],
   themeMode: UIStore.ThemeMode.Light,
 };
 
@@ -28,11 +40,15 @@ const uiSlice = createSlice<UIStore.State, UIStore.Reducers>({
   name: 'user',
   initialState,
   reducers: {
-    enableLoading(state) {
-      state.loading = true;
+    enableLoading(state, action) {
+      const { toLoad } = action.payload;
+
+      if (!state.loading.includes(toLoad)) state.loading.push(toLoad);
     },
-    disableLoading(state) {
-      state.loading = false;
+    disableLoading(state, action) {
+      const { toLoad } = action.payload;
+
+      state.loading = state.loading.filter((loadItem) => loadItem !== toLoad);
     },
     switchThemeMode(state) {
       state.themeMode =

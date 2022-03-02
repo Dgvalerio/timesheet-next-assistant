@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -6,6 +7,7 @@ import { useRouter } from 'next/router';
 import { UserPreferences } from '@/services/firestore/UserPreferences/Controller';
 import { ScrapperApi } from '@/services/scrapperApi';
 import { disableLoading, enableLoading } from '@/store/ui/actions';
+import { Load } from '@/store/ui/slice';
 import { setCookies } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
@@ -14,7 +16,7 @@ import Protocol from 'devtools-protocol';
 interface ControllerReturn {
   name?: string;
   image?: string;
-  loading: boolean;
+  loading: Load[];
   uid?: string;
   cookies?: Protocol.Network.Cookie[];
   goHome: () => void;
@@ -35,7 +37,8 @@ const useWrapperController = (): ControllerReturn => {
 
   const loadUserPreferences = async () => {
     if (!uid) return;
-    dispatch(enableLoading());
+    dispatch(enableLoading({ toLoad: Load.AzureLogin }));
+
     const userPreferences = await UserPreferences.getTimesheetLogin(uid);
 
     if (userPreferences) {
@@ -57,8 +60,12 @@ const useWrapperController = (): ControllerReturn => {
       goTimesheetLogin();
     }
 
-    dispatch(disableLoading());
+    dispatch(disableLoading({ toLoad: Load.AzureLogin }));
   };
+
+  useEffect(() => {
+    dispatch(disableLoading({ toLoad: Load.Page }));
+  }, [dispatch]);
 
   return { uid, cookies, name, image, loading, goHome, loadUserPreferences };
 };

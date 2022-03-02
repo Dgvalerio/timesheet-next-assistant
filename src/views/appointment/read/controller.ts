@@ -76,6 +76,7 @@ const useReadAppointmentsController = (): ControllerReturn => {
 
       if (!response.appointments) {
         setAppointments([]);
+
         return;
       }
 
@@ -117,6 +118,7 @@ const useReadAppointmentsController = (): ControllerReturn => {
 
           if (previousStartTime > currentStartTime) return 1;
           if (previousStartTime < currentStartTime) return -1;
+
           return 0;
         });
 
@@ -129,6 +131,7 @@ const useReadAppointmentsController = (): ControllerReturn => {
 
         if (previousDate > currentDate) return -1;
         if (previousDate < currentDate) return 1;
+
         return 0;
       });
 

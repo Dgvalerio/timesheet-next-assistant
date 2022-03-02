@@ -1,8 +1,10 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useRouter } from 'next/router';
 
+import { disableLoading, enableLoading } from '@/store/ui/actions';
+import { Load } from '@/store/ui/slice';
 import { githubSignIn, googleSignIn, signIn } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
@@ -17,7 +19,7 @@ interface ControllerReturn {
   handleGithubSignIn: () => void;
   handleGoogleSignIn: () => void;
   handleSubmit: (event: FormEvent<FormAuthData>) => void;
-  loading: boolean;
+  loading: Load[];
   uid?: string;
 }
 
@@ -29,9 +31,15 @@ const useAuthController = (): ControllerReturn => {
     ui: { loading },
   } = useSelector((state) => state);
 
-  const goHome = () => void router.push(routes.dashboard());
+  const goHome = () => {
+    dispatch(enableLoading({ toLoad: Load.Page }));
+    void router.push(routes.dashboard());
+  };
 
-  const goSignUp = () => void router.push(routes.signUp());
+  const goSignUp = () => {
+    dispatch(enableLoading({ toLoad: Load.Page }));
+    void router.push(routes.signUp());
+  };
 
   const handleGithubSignIn = () => {
     dispatch(githubSignIn(goHome));
@@ -48,6 +56,10 @@ const useAuthController = (): ControllerReturn => {
 
     dispatch(signIn(email.value, password.value, goHome));
   };
+
+  useEffect(() => {
+    dispatch(disableLoading({ toLoad: Load.Page }));
+  }, [dispatch]);
 
   return {
     goHome,

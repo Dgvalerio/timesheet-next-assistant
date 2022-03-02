@@ -46,6 +46,16 @@
       }
     ],
     "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/consistent-type-definitions": ["error", "interface"]
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "no-restricted-imports": ["error", { "patterns": [".*"] }],
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "return" },
+      { "blankLine": "always", "prev": "*", "next": "throw" },
+      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+      { "blankLine": "always", "prev": "*", "next": ["const", "let", "var"] },
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] }
+    ]
   }
 }

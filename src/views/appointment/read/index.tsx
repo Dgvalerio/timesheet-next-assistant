@@ -63,7 +63,7 @@ const ReadAppointments: NextPage = () => {
           <Grid item xs={12}>
             <Typography variant="h6">Seus apontamentos</Typography>
           </Grid>
-          <Grid item xs={12} spacing={2} justifyContent="space-between">
+          <Grid item xs={12}>
             {appointments.map((appointmentDay) => (
               <>
                 <Typography

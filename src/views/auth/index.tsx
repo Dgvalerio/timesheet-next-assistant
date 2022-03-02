@@ -3,6 +3,7 @@ import React from 'react';
 import type { NextPage } from 'next';
 
 import Loading from '@/components/loading';
+import { Load } from '@/store/ui/slice';
 import useAuthController from '@/views/auth/controller';
 import Styles from '@/views/auth/style';
 import {
@@ -27,6 +28,7 @@ const Auth: NextPage = () => {
 
   if (uid) {
     goHome();
+
     return <Loading />;
   }
 
@@ -97,7 +99,7 @@ const Auth: NextPage = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Backdrop open={loading}>
+      <Backdrop open={loading.includes(Load.SignIn)}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Styles.Container>

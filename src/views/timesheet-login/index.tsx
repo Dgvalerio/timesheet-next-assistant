@@ -2,6 +2,7 @@ import React from 'react';
 
 import type { NextPage } from 'next';
 
+import { Load } from '@/store/ui/slice';
 import Styles from '@/views/auth/style';
 import useTimesheetLoginController from '@/views/timesheet-login/controller';
 import {
@@ -75,7 +76,7 @@ const TimesheetLogin: NextPage = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Backdrop open={loading}>
+      <Backdrop open={loading.includes(Load.AzureLogin)}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Styles.Container>

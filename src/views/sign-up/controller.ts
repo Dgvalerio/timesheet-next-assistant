@@ -1,9 +1,11 @@
-import { FormEvent } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { useRouter } from 'next/router';
 
+import { disableLoading, enableLoading } from '@/store/ui/actions';
+import { Load } from '@/store/ui/slice';
 import { signUp } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
@@ -17,7 +19,7 @@ export interface FormAuthData extends HTMLFormElement {
 interface ControllerReturn {
   goBack: () => void;
   handleSubmit: (event: FormEvent<FormAuthData>) => void;
-  loading: boolean;
+  loading: Load[];
 }
 
 const useSignUpController = (): ControllerReturn => {
@@ -25,9 +27,15 @@ const useSignUpController = (): ControllerReturn => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.ui);
 
-  const goBack = () => void router.push(routes.home());
+  const goBack = () => {
+    dispatch(enableLoading({ toLoad: Load.Page }));
+    void router.push(routes.home());
+  };
 
-  const goDashboard = () => void router.push(routes.dashboard());
+  const goDashboard = () => {
+    dispatch(enableLoading({ toLoad: Load.Page }));
+    void router.push(routes.dashboard());
+  };
 
   const handleSubmit = async (event: FormEvent<FormAuthData>) => {
     event.preventDefault();
@@ -46,6 +54,10 @@ const useSignUpController = (): ControllerReturn => {
 
     dispatch(signUp(userName.value, email.value, password.value, goDashboard));
   };
+
+  useEffect(() => {
+    dispatch(disableLoading({ toLoad: Load.Page }));
+  }, [dispatch]);
 
   return { goBack, handleSubmit, loading };
 };

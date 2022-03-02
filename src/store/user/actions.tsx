@@ -1,6 +1,9 @@
 import { toast } from 'react-toastify';
 
 import { app } from '@/config/firebase';
+import { disableLoading, enableLoading } from '@/store/ui/actions';
+import { Load } from '@/store/ui/slice';
+import { actions } from '@/store/user/slice';
 import { FirebaseError } from '@firebase/util';
 import { Typography } from '@mui/material';
 
@@ -15,18 +18,16 @@ import {
 } from 'firebase/auth';
 import { Action, Dispatch } from 'redux';
 
-import { disableLoading, enableLoading } from '../ui/actions';
-import { actions } from './slice';
-
 const { setCookies, setUserData, clearUserData } = actions;
 
 const signIn =
   (email: string, password: string, toRedirect: () => void) =>
   async (dispatch: Dispatch<Action>): Promise<void> => {
-    await dispatch(enableLoading());
+    await dispatch(enableLoading({ toLoad: Load.SignIn }));
 
     try {
       const auth = await getAuth(app);
+
       await signInWithEmailAndPassword(auth, email, password);
 
       if (!auth.currentUser) throw new Error();
@@ -56,14 +57,14 @@ const signIn =
         console.warn({ error });
       }
     } finally {
-      await dispatch(disableLoading());
+      dispatch(disableLoading({ toLoad: Load.SignIn }));
     }
   };
 
 const googleSignIn =
   (toRedirect: () => void) =>
   async (dispatch: Dispatch<Action>): Promise<void> => {
-    await dispatch(enableLoading());
+    await dispatch(enableLoading({ toLoad: Load.SignIn }));
 
     try {
       const provider = new GoogleAuthProvider();
@@ -98,14 +99,14 @@ const googleSignIn =
         console.warn({ error });
       }
     } finally {
-      await dispatch(disableLoading());
+      await dispatch(disableLoading({ toLoad: Load.SignIn }));
     }
   };
 
 const githubSignIn =
   (toRedirect: () => void) =>
   async (dispatch: Dispatch<Action>): Promise<void> => {
-    await dispatch(enableLoading());
+    await dispatch(enableLoading({ toLoad: Load.SignIn }));
 
     try {
       const provider = new GithubAuthProvider();
@@ -140,17 +141,18 @@ const githubSignIn =
         console.warn({ error });
       }
     } finally {
-      await dispatch(disableLoading());
+      await dispatch(disableLoading({ toLoad: Load.SignIn }));
     }
   };
 
 const signUp =
   (name: string, email: string, password: string, toRedirect: () => void) =>
   async (dispatch: Dispatch<Action>): Promise<void> => {
-    await dispatch(enableLoading());
+    await dispatch(enableLoading({ toLoad: Load.SignUp }));
 
     try {
       const auth = await getAuth(app);
+
       await createUserWithEmailAndPassword(auth, email, password);
 
       if (!auth.currentUser) throw new Error();
@@ -196,14 +198,14 @@ const signUp =
         console.warn({ error });
       }
     } finally {
-      await dispatch(disableLoading());
+      await dispatch(disableLoading({ toLoad: Load.SignUp }));
     }
   };
 
 const signOut =
   (toRedirect: () => void) =>
   async (dispatch: Dispatch<Action>): Promise<void> => {
-    await dispatch(enableLoading());
+    await dispatch(enableLoading({ toLoad: Load.SignOut }));
 
     try {
       const auth = await getAuth(app);
@@ -216,7 +218,7 @@ const signOut =
       console.warn({ error });
       toast.error('Erro ao sair!');
     } finally {
-      await dispatch(disableLoading());
+      await dispatch(disableLoading({ toLoad: Load.SignOut }));
     }
   };
 

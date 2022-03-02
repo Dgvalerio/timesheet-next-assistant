@@ -8,6 +8,7 @@ import { Client } from '@/services/firestore/Client/Controller';
 import { UserPreferences } from '@/services/firestore/UserPreferences/Controller';
 import { ScrapperApi } from '@/services/scrapperApi';
 import { disableLoading, enableLoading } from '@/store/ui/actions';
+import { Load } from '@/store/ui/slice';
 import { setCookies } from '@/store/user/actions';
 import { routes } from '@/utils/routes';
 
@@ -19,7 +20,7 @@ export interface FormAuthData extends HTMLFormElement {
 
 interface ControllerReturn {
   handleSubmit: (event: FormEvent<FormAuthData>) => void;
-  loading: boolean;
+  loading: Load[];
 }
 
 const useTimesheetLoginController = (): ControllerReturn => {
@@ -32,7 +33,7 @@ const useTimesheetLoginController = (): ControllerReturn => {
 
   const handleSubmit = async (event: FormEvent<FormAuthData>) => {
     event.preventDefault();
-    dispatch(enableLoading());
+    dispatch(enableLoading({ toLoad: Load.AzureLogin }));
 
     const {
       keepSave: { checked: keepSave },
@@ -49,6 +50,7 @@ const useTimesheetLoginController = (): ControllerReturn => {
       if (!uid) {
         toast.error('Not authenticated!');
         await router.push(routes.home());
+
         throw new Error('Not authenticated!');
       }
       if (!cookies) throw new Error('Cookies not found!');
@@ -65,7 +67,7 @@ const useTimesheetLoginController = (): ControllerReturn => {
       toast.error((<Error>e).message);
       console.log(e);
     } finally {
-      dispatch(disableLoading());
+      dispatch(disableLoading({ toLoad: Load.AzureLogin }));
     }
   };
 
