@@ -1,17 +1,17 @@
 import React, { FC } from 'react';
 
-import ArrowFullLeft from './arrow-full-left';
-import ArrowLeft from './arrow-left';
-import ArrowRight from './arrow-right';
-import Check from './check';
-import History from './history';
-import Key from './key';
-import Message from './message';
-import Pencil from './pencil';
-import SignIn from './sign-in';
-import SignOut from './sign-out';
-import Speedometer from './speedometer';
-import User from './user';
+import ArrowFullLeft from '@/components/icon/arrow-full-left';
+import ArrowLeft from '@/components/icon/arrow-left';
+import ArrowRight from '@/components/icon/arrow-right';
+import Check from '@/components/icon/check';
+import History from '@/components/icon/history';
+import Key from '@/components/icon/key';
+import Message from '@/components/icon/message';
+import Pencil from '@/components/icon/pencil';
+import SignIn from '@/components/icon/sign-in';
+import SignOut from '@/components/icon/sign-out';
+import Speedometer from '@/components/icon/speedometer';
+import User from '@/components/icon/user';
 
 // Fonts searched in https://iconmonstr.com/
 

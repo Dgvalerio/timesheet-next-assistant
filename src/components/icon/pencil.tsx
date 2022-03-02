@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { IconProps, IconWrapper } from './index';
+import { IconProps, IconWrapper } from '@/components/icon';
 
 // Fonts searched in https://iconmonstr.com/
 
