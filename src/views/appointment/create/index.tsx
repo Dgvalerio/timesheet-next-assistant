@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 
 import Wrapper from '@/components/wrapper';
 import CreateForm from '@/views/appointment/create/components/create';
+import AppointmentsList from '@/views/appointment/create/components/list';
 import useCreateAppointmentController, {
   CreateAppointmentLoad,
 } from '@/views/appointment/create/controller';
@@ -11,7 +12,8 @@ import Styles from '@/views/appointment/create/style';
 import { Backdrop, CircularProgress, Grid, Typography } from '@mui/material';
 
 const CreateAppointment: NextPage = () => {
-  const { onLoading, setOnLoading } = useCreateAppointmentController();
+  const { onLoading, setOnLoading, loadAppointments, setLoadAppointments } =
+    useCreateAppointmentController();
 
   return (
     <Wrapper>
@@ -20,7 +22,16 @@ const CreateAppointment: NextPage = () => {
           <Grid item xs={12}>
             <Typography variant="h6">Novo apontamento</Typography>
           </Grid>
-          <CreateForm onLoading={onLoading} setOnLoading={setOnLoading} />
+          <CreateForm
+            onLoading={onLoading}
+            setOnLoading={setOnLoading}
+            loadAppointments={loadAppointments}
+          />
+          <AppointmentsList
+            onLoading={onLoading}
+            setOnLoading={setOnLoading}
+            setLoadAppointments={setLoadAppointments}
+          />
         </Grid>
       </Styles.Container>
       <Backdrop open={onLoading.includes(CreateAppointmentLoad.Submit)}>

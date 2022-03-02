@@ -13,9 +13,10 @@ import {
 } from '@mui/material';
 
 const CreateForm: FC<{
+  loadAppointments: () => void;
   onLoading: CreateAppointmentLoad[];
   setOnLoading: Dispatch<SetStateAction<CreateAppointmentLoad[]>>;
-}> = ({ onLoading, setOnLoading }) => {
+}> = ({ onLoading, setOnLoading, loadAppointments }) => {
   const {
     clients,
     client,
@@ -40,7 +41,7 @@ const CreateForm: FC<{
     commitVisible,
     handleSubmit,
     updateField,
-  } = useCreateFormController({ onLoading, setOnLoading });
+  } = useCreateFormController({ onLoading, setOnLoading, loadAppointments });
 
   return (
     <Grid

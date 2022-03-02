@@ -29,17 +29,17 @@ const AppointmentItem: React.FC<{ appointment: ReadAppointmentItem }> = ({
         id={`appointment-${id}-header`}
       >
         <Grid container alignItems="center">
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <Typography variant="overline">
               {client} &gt; {project} &gt; {category}
             </Typography>
           </Grid>
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <Typography variant="h6">
               Dás {start} às {end}
             </Typography>
           </Grid>
-          <Grid xs={8}>
+          <Grid item xs={8}>
             <Typography sx={{ color: 'text.secondary' }}>
               {description}
             </Typography>

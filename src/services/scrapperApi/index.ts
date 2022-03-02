@@ -98,6 +98,7 @@ export namespace Scrapper {
     export namespace Appointments {
       export interface Request {
         cookies: Protocol.Network.Cookie[];
+        date?: string;
       }
 
       export interface Appointment {

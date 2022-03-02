@@ -1,59 +1,44 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { CategoryRepository } from '@/services/firestore/Category/Repository';
 import { ClientRepository } from '@/services/firestore/Client/Repository';
 import { ProjectRepository } from '@/services/firestore/Project/Repository';
-import { Scrapper, ScrapperApi } from '@/services/scrapperApi';
+import { ScrapperApi } from '@/services/scrapperApi';
 import { setCookies } from '@/store/user/actions';
 import { invertDate, minutesToTime, timeToMinutes } from '@/utils';
+import { CreateAppointmentLoad } from '@/views/appointment/create/controller';
+import {
+  AppointmentDay,
+  ReadAppointmentItem,
+  AppointmentDaysObject,
+  adaptEntity,
+} from '@/views/appointment/read/controller';
 
 import { AxiosError } from 'axios';
 
-export interface ReadAppointmentItem {
-  id: string;
-  client: string;
-  project: string;
-  category: string;
-  start: string;
-  end: string;
-  total: string;
-  notMonetize: boolean;
-  description: string;
-  commits?: string[];
-}
-export interface AppointmentDaysObject {
-  [key: string]: { items: ReadAppointmentItem[]; total: string };
-}
-export interface AppointmentDay {
-  date: string;
-  items: ReadAppointmentItem[];
-  total: string;
+interface ControllerParams {
+  onLoading: CreateAppointmentLoad[];
+  setOnLoading: Dispatch<SetStateAction<CreateAppointmentLoad[]>>;
+  setLoadAppointments: Dispatch<SetStateAction<() => void>>;
 }
 
 interface ControllerReturn {
-  isLoading: boolean;
-  appointments: AppointmentDay[];
+  appointmentDay: AppointmentDay;
+  dayDate: string;
+  setDayDate: Dispatch<SetStateAction<string>>;
+  worked: string;
+  toWork: string;
 }
 
-export const adaptEntity = (
-  appointment: Scrapper.Read.Appointments.Appointment
-): ReadAppointmentItem => ({
-  id: appointment.id,
-  client: appointment.cliente,
-  project: appointment.projeto,
-  category: appointment.categoria,
-  start: appointment.horaInicial,
-  end: appointment.horaFinal,
-  total: minutesToTime(
-    timeToMinutes(appointment.horaFinal) -
-      timeToMinutes(appointment.horaInicial)
-  ),
-  notMonetize: appointment.naoContabilizado,
-  commits: appointment.commit.split(' '),
-  description: appointment.descricao,
-});
+export type Controller = (params: ControllerParams) => ControllerReturn;
 
 const Manage = {
   Client: new ClientRepository(),
@@ -61,21 +46,62 @@ const Manage = {
   Category: new CategoryRepository(),
 };
 
-const useReadAppointmentsController = (): ControllerReturn => {
+const voidDay = (actualDate: string) => {
+  const aux = {
+    date: '',
+    items: [],
+    total: '00:00',
+  };
+
+  const auxDate = new Date(actualDate.replace('-', '/'));
+  const auxDateString = auxDate.toLocaleDateString(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  aux.date = auxDateString[0].toUpperCase() + auxDateString.slice(1);
+
+  return aux;
+};
+
+const useAppointmentsListController: Controller = ({
+  setOnLoading,
+  setLoadAppointments,
+}) => {
   const dispatch = useDispatch();
   const { uid, cookies } = useSelector((state) => state.user);
-  const [isLoading, setIsLoading] = useState(false);
-  const [appointments, setAppointments] = useState<AppointmentDay[]>([]);
+  const [dayDate, setDayDate] = useState(
+    (() => {
+      const date = new Date();
+
+      return date.toISOString().split('T')[0];
+    })()
+  );
+  const [hoursNeeded] = useState('08:00');
+  const [worked, setWorked] = useState('');
+  const [toWork, setToWork] = useState(`Faltam ${hoursNeeded}`);
+  const [appointmentDay, setAppointmentDay] = useState<AppointmentDay>(
+    voidDay(dayDate)
+  );
 
   const loadAppointments = useCallback(async () => {
     if (!uid) return;
-    setIsLoading(true);
+    setOnLoading((prev) =>
+      prev.includes(CreateAppointmentLoad.Appointments)
+        ? prev
+        : prev.concat(CreateAppointmentLoad.Appointments)
+    );
 
     try {
-      const response = await ScrapperApi.readAppointments({ cookies });
+      const response = await ScrapperApi.readAppointments({
+        cookies,
+        date: dayDate.split('-').reverse().join('/'),
+      });
 
       if (!response.appointments) {
-        setAppointments([]);
+        setAppointmentDay(voidDay(dayDate));
 
         return;
       }
@@ -172,12 +198,27 @@ const useReadAppointmentsController = (): ControllerReturn => {
 
         aux.items = await Promise.all(promise);
 
-        aux.total = `foram trabalhadas ${aux.total.replace(':', 'h')}m`;
-
         return aux;
       });
 
-      setAppointments(await Promise.all(appointmentsPromise));
+      const [resultDay] = await Promise.all(appointmentsPromise);
+
+      if (resultDay) {
+        const sumWorked =
+          timeToMinutes(hoursNeeded) - timeToMinutes(resultDay.total);
+
+        setAppointmentDay(resultDay);
+        setToWork(
+          sumWorked > 0
+            ? `Faltam ${minutesToTime(sumWorked)}`
+            : `${minutesToTime(Math.abs(sumWorked))} extras`
+        );
+        setWorked(`${resultDay.total} trabalhadas`);
+      } else {
+        setToWork(`Faltam ${hoursNeeded}`);
+        setWorked('00:00 trabalhadas');
+        setAppointmentDay(voidDay(dayDate));
+      }
     } catch (e) {
       toast.error(
         (<AxiosError>e).response?.data.error ||
@@ -188,9 +229,11 @@ const useReadAppointmentsController = (): ControllerReturn => {
         dispatch(setCookies({ cookies: [] }));
       }
     } finally {
-      setIsLoading(false);
+      setOnLoading((prev) =>
+        prev.filter((item) => item !== CreateAppointmentLoad.Appointments)
+      );
     }
-  }, [cookies, dispatch, uid]);
+  }, [uid, setOnLoading, cookies, dayDate, hoursNeeded, dispatch]);
 
   useEffect(() => {
     if (cookies) {
@@ -198,7 +241,12 @@ const useReadAppointmentsController = (): ControllerReturn => {
     }
   }, [cookies, loadAppointments]);
 
-  return { isLoading, appointments };
+  useEffect(() => {
+    console.log('Update load appointments');
+    setLoadAppointments(loadAppointments);
+  }, [loadAppointments, setLoadAppointments]);
+
+  return { appointmentDay, dayDate, setDayDate, worked, toWork };
 };
 
-export default useReadAppointmentsController;
+export default useAppointmentsListController;

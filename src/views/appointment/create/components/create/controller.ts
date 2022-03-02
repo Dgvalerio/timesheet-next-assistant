@@ -20,6 +20,7 @@ import { AxiosError } from 'axios';
 import { compareAsc } from 'date-fns';
 
 interface ControllerParams {
+  loadAppointments: () => void;
   onLoading: CreateAppointmentLoad[];
   setOnLoading: Dispatch<SetStateAction<CreateAppointmentLoad[]>>;
 }
@@ -64,7 +65,10 @@ export enum InputName {
 
 export type Controller = (params: ControllerParams) => ControllerReturn;
 
-const useCreateFormController: Controller = ({ onLoading, setOnLoading }) => {
+const useCreateFormController: Controller = ({
+  setOnLoading,
+  loadAppointments,
+}) => {
   const dispatch = useDispatch();
   const { uid, cookies } = useSelector((state) => state.user);
 
@@ -347,17 +351,19 @@ const useCreateFormController: Controller = ({ onLoading, setOnLoading }) => {
       });
 
       toast.success('Sucesso!');
+
+      loadAppointments();
     } catch (e) {
       toast.error((<AxiosError>e).response?.data.error || 'Falha!');
 
       if ((<AxiosError>e).response?.status === 401) {
         dispatch(setCookies({ cookies: [] }));
       }
+    } finally {
+      setOnLoading((prev) =>
+        prev.filter((item) => item !== CreateAppointmentLoad.Submit)
+      );
     }
-
-    setOnLoading((prev) =>
-      prev.filter((item) => item !== CreateAppointmentLoad.Submit)
-    );
   };
 
   const loadClients = useCallback(async () => {
@@ -487,7 +493,6 @@ const useCreateFormController: Controller = ({ onLoading, setOnLoading }) => {
     commitError,
     commitVisible,
     handleSubmit,
-    onLoading,
     updateField,
   };
 };
