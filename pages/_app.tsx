@@ -2,7 +2,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
 import { NextPage } from 'next';
-import type { AppProps } from 'next/app';
+import type { AppProps, NextWebVitalsMetric } from 'next/app';
 import Head from 'next/head';
 
 import StyleWrapper from '@/components/style-wrapper';
@@ -11,6 +11,21 @@ import { toPersist, store } from '@/store';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import 'react-toastify/dist/ReactToastify.min.css';
+
+export const reportWebVitals = (metric: NextWebVitalsMetric) => {
+  const body = JSON.stringify(metric);
+  const url = 'https://vercel.com/dgvalerio/timesheet-next-assistant/analytics';
+
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(url, body);
+  } else {
+    void fetch(url, { body, method: 'POST', keepalive: true });
+  }
+
+  console.log(metric);
+
+  return metric;
+};
 
 const MyApp: NextPage<AppProps> = ({ Component, pageProps }) => (
   <>
