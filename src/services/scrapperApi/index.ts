@@ -183,6 +183,24 @@ export namespace Scrapper {
             error: string;
           };
     }
+
+    export namespace TimeInterval {
+      export interface Request {
+        cookies: Protocol.Network.Cookie[];
+        startDate: string;
+        endDate: string;
+      }
+
+      export type Response =
+        | {
+            interval: string;
+            error?: never;
+          }
+        | {
+            interval?: never;
+            error: string;
+          };
+    }
   }
 
   export namespace Create {
@@ -224,6 +242,9 @@ export namespace Scrapper {
     readClients(
       readClientsDto: Read.Clients.Request
     ): Promise<Read.Clients.Response>;
+    readTimeInterval(
+      readTimeIntervalDto: Read.TimeInterval.Request
+    ): Promise<Read.TimeInterval.Response>;
     createAppointment(
       createAppointmentDto: Create.Appointment.Request
     ): Promise<Create.Appointment.Response>;
@@ -310,6 +331,22 @@ class ScrapperController implements Scrapper.Interface {
     const { data } = await this.api.post(
       '/scrapper/read-clients',
       readClientsDto
+    );
+
+    return data;
+  }
+
+  /**
+   * readTimeInterval
+   * @param {Scrapper.Read.TimeInterval.Request} readTimeIntervalDto
+   * @return {Scrapper.Read.TimeInterval.Response}
+   * */
+  async readTimeInterval(
+    readTimeIntervalDto: Scrapper.Read.TimeInterval.Request
+  ): Promise<Scrapper.Read.TimeInterval.Response> {
+    const { data } = await this.api.post(
+      '/scrapper/read-time-interval',
+      readTimeIntervalDto
     );
 
     return data;

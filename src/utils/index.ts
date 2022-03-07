@@ -4,6 +4,12 @@ export const timeToMinutes = (time: string): number => {
   return Number(hours) * 60 + Number(minutes);
 };
 
+export const timeToNumber = (time: string): number => {
+  const [hours, minutes] = time.split(':');
+
+  return Number(`${hours}.${Math.floor((Number(minutes) * 100) / 60)}`);
+};
+
 export const minutesToTime = (number: number): string => {
   const aux = { hours: Math.floor(number / 60), minutes: number % 60 };
   const hours = String(aux.hours).padStart(2, '0');
