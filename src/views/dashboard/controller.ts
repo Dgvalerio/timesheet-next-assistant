@@ -21,7 +21,7 @@ import { mix } from 'polished';
 interface ControllerReturn {
   monthlyWorkload: number;
   monthlyWorkloadWorked: number;
-  data: ChartData<any, any, any>;
+  data: ChartData<any, any, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
   checked: boolean;
   setChecked: Dispatch<SetStateAction<boolean>>;
   onLoading: DashboardLoad[];
@@ -64,7 +64,7 @@ const useDashboardController = (): ControllerReturn => {
   const [onLoading, setOnLoading] = useState<DashboardLoad[]>([]);
 
   const loadMonthHours = useCallback(async () => {
-    if (!uid) return;
+    if (!uid || cookies.length === 0) return;
     setOnLoading((prev) =>
       prev.includes(DashboardLoad.GetMonthHours)
         ? prev
@@ -91,7 +91,7 @@ const useDashboardController = (): ControllerReturn => {
       );
 
       if ((<AxiosError>e).response?.status === 401) {
-        dispatch(setCookies({ cookies: [] }));
+        await dispatch(setCookies({ cookies: [] }));
       }
     } finally {
       setOnLoading((prev) =>
@@ -100,6 +100,7 @@ const useDashboardController = (): ControllerReturn => {
     }
   }, [cookies, dispatch, uid]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: ChartData<any, any, any> = {
     labels: ['Horas não trabalhadas', 'Horas trabalhadas'],
     datasets: [
