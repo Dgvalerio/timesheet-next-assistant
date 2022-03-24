@@ -350,11 +350,13 @@ const useCreateFormController: Controller = ({
         notMonetize: accounted,
       });
 
-      toast.success('Sucesso!');
+      toast.success('Apontado com sucesso!');
 
       loadAppointments();
     } catch (e) {
-      toast.error((<AxiosError>e).response?.data.error || 'Falha!');
+      toast.error(
+        (<AxiosError>e).response?.data.error || 'Falha ao realizar apontamento!'
+      );
 
       if ((<AxiosError>e).response?.status === 401) {
         dispatch(setCookies({ cookies: [] }));

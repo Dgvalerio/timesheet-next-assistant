@@ -4,7 +4,8 @@ interface ControllerReturn {
   onLoading: CreateAppointmentLoad[];
   setOnLoading: Dispatch<SetStateAction<CreateAppointmentLoad[]>>;
   loadAppointments: () => void;
-  setLoadAppointments: Dispatch<SetStateAction<() => void>>;
+  appointmentsLoaded: () => void;
+  loadingAppointments: number;
 }
 
 export enum CreateAppointmentLoad {
@@ -15,11 +16,21 @@ export enum CreateAppointmentLoad {
 
 const useCreateAppointmentController = (): ControllerReturn => {
   const [onLoading, setOnLoading] = useState<CreateAppointmentLoad[]>([]);
-  const [loadAppointments, setLoadAppointments] = useState<() => void>(() => {
-    console.log('Load appointments not implemented...');
-  });
+  const [loadingAppointments, setLoadingAppointments] = useState<number>(0);
 
-  return { onLoading, setOnLoading, loadAppointments, setLoadAppointments };
+  const loadAppointments = () =>
+    setLoadingAppointments((prevState) => prevState + 1);
+
+  const appointmentsLoaded = () =>
+    setLoadingAppointments((prevState) => prevState - 1);
+
+  return {
+    onLoading,
+    setOnLoading,
+    loadingAppointments,
+    loadAppointments,
+    appointmentsLoaded,
+  };
 };
 
 export default useCreateAppointmentController;

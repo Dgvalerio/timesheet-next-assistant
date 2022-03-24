@@ -27,7 +27,8 @@ import { AxiosError } from 'axios';
 interface ControllerParams {
   onLoading: CreateAppointmentLoad[];
   setOnLoading: Dispatch<SetStateAction<CreateAppointmentLoad[]>>;
-  setLoadAppointments: Dispatch<SetStateAction<() => void>>;
+  appointmentsLoaded: () => void;
+  loadingAppointments: number;
 }
 
 interface ControllerReturn {
@@ -68,7 +69,8 @@ const voidDay = (actualDate: string) => {
 
 const useAppointmentsListController: Controller = ({
   setOnLoading,
-  setLoadAppointments,
+  appointmentsLoaded,
+  loadingAppointments,
 }) => {
   const dispatch = useDispatch();
   const { uid, cookies } = useSelector((state) => state.user);
@@ -88,6 +90,7 @@ const useAppointmentsListController: Controller = ({
 
   const loadAppointments = useCallback(async () => {
     if (!uid) return;
+
     setOnLoading((prev) =>
       prev.includes(CreateAppointmentLoad.Appointments)
         ? prev
@@ -226,7 +229,7 @@ const useAppointmentsListController: Controller = ({
       );
 
       if ((<AxiosError>e).response?.status === 401) {
-        dispatch(setCookies({ cookies: [] }));
+        await dispatch(setCookies({ cookies: [] }));
       }
     } finally {
       setOnLoading((prev) =>
@@ -242,9 +245,11 @@ const useAppointmentsListController: Controller = ({
   }, [cookies, loadAppointments]);
 
   useEffect(() => {
+    if (loadingAppointments <= 0) return;
+
     console.log('Update load appointments');
-    setLoadAppointments(loadAppointments);
-  }, [loadAppointments, setLoadAppointments]);
+    void loadAppointments().finally(() => appointmentsLoaded());
+  }, [appointmentsLoaded, loadAppointments, loadingAppointments]);
 
   return { appointmentDay, dayDate, setDayDate, worked, toWork };
 };

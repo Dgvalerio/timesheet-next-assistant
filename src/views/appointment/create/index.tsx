@@ -12,8 +12,13 @@ import Styles from '@/views/appointment/create/style';
 import { Backdrop, CircularProgress, Grid, Typography } from '@mui/material';
 
 const CreateAppointment: NextPage = () => {
-  const { onLoading, setOnLoading, loadAppointments, setLoadAppointments } =
-    useCreateAppointmentController();
+  const {
+    onLoading,
+    setOnLoading,
+    loadAppointments,
+    appointmentsLoaded,
+    loadingAppointments,
+  } = useCreateAppointmentController();
 
   return (
     <Wrapper>
@@ -30,7 +35,8 @@ const CreateAppointment: NextPage = () => {
           <AppointmentsList
             onLoading={onLoading}
             setOnLoading={setOnLoading}
-            setLoadAppointments={setLoadAppointments}
+            appointmentsLoaded={appointmentsLoaded}
+            loadingAppointments={loadingAppointments}
           />
         </Grid>
       </Styles.Container>

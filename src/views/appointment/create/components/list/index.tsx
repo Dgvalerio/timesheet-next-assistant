@@ -52,15 +52,17 @@ const AppointmentItem: React.FC<{ appointment: ReadAppointmentItem }> = ({
 };
 
 const AppointmentsList: FC<{
-  setLoadAppointments: Dispatch<SetStateAction<() => void>>;
+  appointmentsLoaded: () => void;
+  loadingAppointments: number;
   onLoading: CreateAppointmentLoad[];
   setOnLoading: Dispatch<SetStateAction<CreateAppointmentLoad[]>>;
-}> = ({ onLoading, setOnLoading, setLoadAppointments }) => {
+}> = ({ onLoading, setOnLoading, appointmentsLoaded, loadingAppointments }) => {
   const { appointmentDay, dayDate, setDayDate, worked, toWork } =
     useAppointmentsListController({
       onLoading,
       setOnLoading,
-      setLoadAppointments,
+      appointmentsLoaded,
+      loadingAppointments,
     });
 
   return (
