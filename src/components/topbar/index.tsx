@@ -56,10 +56,10 @@ const TopBar: FC<{ name?: string; image?: string }> = ({ name, image }) => {
         <Tooltip title="Ver notificações">
           <IconButton
             size="large"
-            aria-label="show 17 new notifications"
+            aria-label="show 0 new notifications"
             color="inherit"
           >
-            <Badge badgeContent={17} color="error">
+            <Badge badgeContent={0} color="success">
               <NotificationsIcon color="disabled" />
             </Badge>
           </IconButton>
