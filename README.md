@@ -16,6 +16,7 @@
  - [ ] A data deve ser baseada não no dia de hoje, mas no último dia apontado (levar em cota, somente dias úteis);
  - [ ] Rotinas (conversar mais com Renan);
  - [ ] Possibilitar o uso básico e o uso avançado;
+ - [ ] Dar a opção de collapsar o menu lateral;
 
 # Fix
  - [ ] validar values no signIn e no signUp
