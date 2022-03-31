@@ -36,7 +36,7 @@ const AppointmentItem: React.FC<{ appointment: ReadAppointmentItem }> = ({
           </Grid>
           <Grid item xs={4}>
             <Typography variant="h6">
-              Dás {start} às {end}
+              Das {start} às {end}
             </Typography>
           </Grid>
           <Grid item xs={8}>
